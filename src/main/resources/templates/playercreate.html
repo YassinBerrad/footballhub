@@ -53,18 +53,28 @@
                     </div>
                 </div>
 
-                <div class="mb-3" th:if="${!isEdit}">
-                    <label for="imageFile" class="form-label">Afbeelding uploaden</label>
-                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/*">
-                    <div class="form-text">Toegestaan: JPG, JPEG, PNG of WEBP</div>
-                    <div class="text-danger small mt-1" th:if="${imageError}" th:text="${imageError}">
-                        Afbeelding fout
+                <div class="mb-3" th:if="${isEdit and player.imageUrl != null}">
+                    <label class="form-label">Huidige afbeelding</label>
+                    <div>
+                        <img th:src="${player.imageUrl}"
+                             th:alt="${player.name}"
+                             class="img-thumbnail"
+                             style="max-width: 200px;">
                     </div>
                 </div>
 
-                <div class="mb-3" th:if="${isEdit}">
-                    <label for="imageUrl" class="form-label">Image URL</label>
-                    <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
+                <div class="mb-3">
+                    <label for="imageFile" class="form-label"
+                           th:text="${isEdit} ? 'Nieuwe afbeelding uploaden (optioneel)' : 'Afbeelding uploaden'">
+                        Afbeelding uploaden
+                    </label>
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/*">
+                    <div class="form-text" th:text="${isEdit} ? 'Laat leeg om de huidige afbeelding te behouden.' : 'Toegestaan: JPG, JPEG, PNG of WEBP'">
+                        Toegestaan: JPG, JPEG, PNG of WEBP
+                    </div>
+                    <div class="text-danger small mt-1" th:if="${imageError}" th:text="${imageError}">
+                        Afbeelding fout
+                    </div>
                 </div>
 
                 <div class="mb-4">

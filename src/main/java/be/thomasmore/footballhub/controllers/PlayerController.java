@@ -114,11 +114,8 @@ public class PlayerController {
                                    @RequestParam("imageFile") MultipartFile imageFile,
                                    Model model) {
 
-        if (imageFile.isEmpty()) {
+        if (imageFile == null || imageFile.isEmpty()) {
             model.addAttribute("imageError", "Afbeelding is verplicht.");
-        }
-
-        if (bindingResult.hasErrors() || imageFile.isEmpty()) {
             model.addAttribute("clubs", clubRepository.findAll());
             model.addAttribute("isEdit", false);
             return "playercreate";
@@ -126,7 +123,7 @@ public class PlayerController {
 
         String originalFileName = imageFile.getOriginalFilename();
 
-        if (originalFileName == null || originalFileName.isBlank()) {
+        if (originalFileName == null || originalFileName.isBlank() || !originalFileName.contains(".")) {
             model.addAttribute("imageError", "Ongeldige bestandsnaam.");
             model.addAttribute("clubs", clubRepository.findAll());
             model.addAttribute("isEdit", false);
@@ -135,11 +132,20 @@ public class PlayerController {
 
         String lowerFileName = originalFileName.toLowerCase();
 
-        if (!(lowerFileName.endsWith(".jpg") ||
-                lowerFileName.endsWith(".jpeg") ||
-                lowerFileName.endsWith(".png") ||
-                lowerFileName.endsWith(".webp"))) {
+        boolean validImageType =
+                lowerFileName.endsWith(".jpg") ||
+                        lowerFileName.endsWith(".jpeg") ||
+                        lowerFileName.endsWith(".png") ||
+                        lowerFileName.endsWith(".webp");
+
+        if (!validImageType) {
             model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
+            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("isEdit", false);
+            return "playercreate";
+        }
+
+        if (bindingResult.hasErrors()) {
             model.addAttribute("clubs", clubRepository.findAll());
             model.addAttribute("isEdit", false);
             return "playercreate";
@@ -188,12 +194,67 @@ public class PlayerController {
     @PostMapping("/playeredit")
     public String playerEditPost(@Valid Player player,
                                  BindingResult bindingResult,
+                                 @RequestParam("imageFile") MultipartFile imageFile,
                                  Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("clubs", clubRepository.findAll());
             model.addAttribute("isEdit", true);
             return "playercreate";
+        }
+
+        Optional<Player> existingPlayerOptional = playerRepository.findById(player.getId());
+
+        if (existingPlayerOptional.isEmpty()) {
+            return "redirect:/playerlist";
+        }
+
+        Player existingPlayer = existingPlayerOptional.get();
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String originalFileName = imageFile.getOriginalFilename();
+
+            if (originalFileName == null || originalFileName.isBlank() || !originalFileName.contains(".")) {
+                model.addAttribute("imageError", "Ongeldige bestandsnaam.");
+                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("isEdit", true);
+                return "playercreate";
+            }
+
+            String lowerFileName = originalFileName.toLowerCase();
+
+            boolean validImageType =
+                    lowerFileName.endsWith(".jpg") ||
+                            lowerFileName.endsWith(".jpeg") ||
+                            lowerFileName.endsWith(".png") ||
+                            lowerFileName.endsWith(".webp");
+
+            if (!validImageType) {
+                model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
+                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("isEdit", true);
+                return "playercreate";
+            }
+
+            try {
+                String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String uniqueFileName = UUID.randomUUID() + extension;
+
+                Path uploadPath = Paths.get("src/main/resources/static/img");
+                Files.createDirectories(uploadPath);
+
+                Path filePath = uploadPath.resolve(uniqueFileName);
+                Files.write(filePath, imageFile.getBytes());
+
+                player.setImageUrl("/img/" + uniqueFileName);
+            } catch (IOException e) {
+                model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
+                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("isEdit", true);
+                return "playercreate";
+            }
+        } else {
+            player.setImageUrl(existingPlayer.getImageUrl());
         }
 
         playerRepository.save(player);
