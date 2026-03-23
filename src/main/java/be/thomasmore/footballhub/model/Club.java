@@ -34,7 +34,6 @@ public class Club {
     @Max(value = 2026, message = "Oprichtingsjaar mag niet in de toekomst liggen.")
     private Integer foundedYear;
 
-    @NotBlank(message = "Image URL is verplicht.")
     private String imageUrl;
 
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)

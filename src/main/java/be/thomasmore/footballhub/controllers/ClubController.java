@@ -9,10 +9,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class ClubController {
@@ -84,9 +91,55 @@ public class ClubController {
     @PostMapping("/clubcreate")
     public String clubCreatePost(@Valid Club club,
                                  BindingResult bindingResult,
+                                 @RequestParam("imageFile") MultipartFile imageFile,
                                  Model model) {
 
+        if (imageFile == null || imageFile.isEmpty()) {
+            model.addAttribute("imageError", "Afbeelding is verplicht.");
+            model.addAttribute("isEdit", false);
+            return "clubcreate";
+        }
+
+        String originalFileName = imageFile.getOriginalFilename();
+
+        if (originalFileName == null || originalFileName.isBlank() || !originalFileName.contains(".")) {
+            model.addAttribute("imageError", "Ongeldige bestandsnaam.");
+            model.addAttribute("isEdit", false);
+            return "clubcreate";
+        }
+
+        String lowerFileName = originalFileName.toLowerCase();
+
+        boolean validImageType =
+                lowerFileName.endsWith(".jpg") ||
+                        lowerFileName.endsWith(".jpeg") ||
+                        lowerFileName.endsWith(".png") ||
+                        lowerFileName.endsWith(".webp");
+
+        if (!validImageType) {
+            model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
+            model.addAttribute("isEdit", false);
+            return "clubcreate";
+        }
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("isEdit", false);
+            return "clubcreate";
+        }
+
+        try {
+            String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String uniqueFileName = UUID.randomUUID() + extension;
+
+            Path uploadPath = Paths.get("src/main/resources/static/img");
+            Files.createDirectories(uploadPath);
+
+            Path filePath = uploadPath.resolve(uniqueFileName);
+            Files.write(filePath, imageFile.getBytes());
+
+            club.setImageUrl("/img/" + uniqueFileName);
+        } catch (IOException e) {
+            model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
             model.addAttribute("isEdit", false);
             return "clubcreate";
         }
@@ -115,11 +168,63 @@ public class ClubController {
     @PostMapping("/clubedit")
     public String clubEditPost(@Valid Club club,
                                BindingResult bindingResult,
+                               @RequestParam("imageFile") MultipartFile imageFile,
                                Model model) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("isEdit", true);
             return "clubcreate";
+        }
+
+        Optional<Club> existingClubOptional = clubRepository.findById(club.getId());
+
+        if (existingClubOptional.isEmpty()) {
+            return "redirect:/clublist";
+        }
+
+        Club existingClub = existingClubOptional.get();
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String originalFileName = imageFile.getOriginalFilename();
+
+            if (originalFileName == null || originalFileName.isBlank() || !originalFileName.contains(".")) {
+                model.addAttribute("imageError", "Ongeldige bestandsnaam.");
+                model.addAttribute("isEdit", true);
+                return "clubcreate";
+            }
+
+            String lowerFileName = originalFileName.toLowerCase();
+
+            boolean validImageType =
+                    lowerFileName.endsWith(".jpg") ||
+                            lowerFileName.endsWith(".jpeg") ||
+                            lowerFileName.endsWith(".png") ||
+                            lowerFileName.endsWith(".webp");
+
+            if (!validImageType) {
+                model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
+                model.addAttribute("isEdit", true);
+                return "clubcreate";
+            }
+
+            try {
+                String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String uniqueFileName = UUID.randomUUID() + extension;
+
+                Path uploadPath = Paths.get("src/main/resources/static/img");
+                Files.createDirectories(uploadPath);
+
+                Path filePath = uploadPath.resolve(uniqueFileName);
+                Files.write(filePath, imageFile.getBytes());
+
+                club.setImageUrl("/img/" + uniqueFileName);
+            } catch (IOException e) {
+                model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
+                model.addAttribute("isEdit", true);
+                return "clubcreate";
+            }
+        } else {
+            club.setImageUrl(existingClub.getImageUrl());
         }
 
         clubRepository.save(club);

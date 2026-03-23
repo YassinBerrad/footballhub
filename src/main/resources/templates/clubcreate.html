@@ -16,7 +16,8 @@
         <div class="card-body p-4">
             <form method="post"
                   th:action="${isEdit} ? @{/clubedit} : @{/clubcreate}"
-                  th:object="${club}">
+                  th:object="${club}"
+                  enctype="multipart/form-data">
 
                 <input type="hidden" th:field="*{id}">
 
@@ -52,11 +53,32 @@
                     </div>
                 </div>
 
+                <div class="mb-3" th:if="${isEdit and club.imageUrl != null}">
+                    <label class="form-label">Huidige afbeelding</label>
+                    <div>
+                        <img th:src="${club.imageUrl}"
+                             th:alt="${club.name}"
+                             class="img-thumbnail"
+                             style="max-width: 200px;">
+                    </div>
+                </div>
+
                 <div class="mb-4">
-                    <label for="imageUrl" class="form-label">Image URL</label>
-                    <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
-                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">
-                        Image URL fout
+                    <label for="imageFile" class="form-label"
+                           th:text="${isEdit} ? 'Nieuwe afbeelding uploaden (optioneel)' : 'Afbeelding uploaden'">
+                        Afbeelding uploaden
+                    </label>
+                    <input type="file"
+                           id="imageFile"
+                           name="imageFile"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.webp,image/*">
+                    <div class="form-text"
+                         th:text="${isEdit} ? 'Laat leeg om de huidige afbeelding te behouden.' : 'Toegestaan: JPG, JPEG, PNG of WEBP'">
+                        Toegestaan: JPG, JPEG, PNG of WEBP
+                    </div>
+                    <div class="text-danger small mt-1" th:if="${imageError}" th:text="${imageError}">
+                        Afbeelding fout
                     </div>
                 </div>
 
