@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -51,23 +53,41 @@ public class PlayerController {
             Optional<Player> optionalPlayer = playerRepository.findById(id);
 
             if (optionalPlayer.isPresent()) {
-                model.addAttribute("player", optionalPlayer.get());
+                Player player = optionalPlayer.get();
+                model.addAttribute("player", player);
 
-                int maxId = (int) playerRepository.count();
+                List<Player> allPlayers = new ArrayList<>();
+                playerRepository.findAllByOrderByIdAsc().forEach(allPlayers::add);
 
-                int prevId = id - 1;
-                int nextId = id + 1;
+                if (!allPlayers.isEmpty()) {
+                    int currentIndex = -1;
 
-                if (id == 1) {
-                    prevId = maxId;
+                    for (int i = 0; i < allPlayers.size(); i++) {
+                        if (allPlayers.get(i).getId().equals(id)) {
+                            currentIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (currentIndex != -1) {
+                        int prevIndex = currentIndex - 1;
+                        int nextIndex = currentIndex + 1;
+
+                        if (prevIndex < 0) {
+                            prevIndex = allPlayers.size() - 1;
+                        }
+
+                        if (nextIndex >= allPlayers.size()) {
+                            nextIndex = 0;
+                        }
+
+                        Integer prevId = allPlayers.get(prevIndex).getId();
+                        Integer nextId = allPlayers.get(nextIndex).getId();
+
+                        model.addAttribute("prevId", prevId);
+                        model.addAttribute("nextId", nextId);
+                    }
                 }
-
-                if (id == maxId) {
-                    nextId = 1;
-                }
-
-                model.addAttribute("prevId", prevId);
-                model.addAttribute("nextId", nextId);
             }
         }
 

@@ -19,4 +19,6 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
                 (:clubId is null or p.club.id = :clubId)
             """)
     Iterable<Player> findByFilter(@Param("keyword") String keyword, @Param("clubId") Integer clubId);
+
+    Iterable<Player> findAllByOrderByIdAsc();
 }
