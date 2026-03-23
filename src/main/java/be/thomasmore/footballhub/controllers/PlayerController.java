@@ -130,4 +130,13 @@ public class PlayerController {
 
         return "redirect:/playerdetails/" + player.getId();
     }
+
+    @PostMapping("/playerdelete/{id}")
+    public String playerDelete(@PathVariable Integer id) {
+        if (playerRepository.existsById(id)) {
+            playerRepository.deleteById(id);
+        }
+
+        return "redirect:/playerlist";
+    }
 }
