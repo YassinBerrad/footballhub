@@ -8,6 +8,16 @@
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
 <main class="container py-5" th:if="${club}">
+    <div class="d-flex justify-content-between mb-3">
+        <a th:href="@{/clubdetails/{id}(id=${prevId})}" class="btn btn-outline-secondary">
+            ← Vorige
+        </a>
+
+        <a th:href="@{/clubdetails/{id}(id=${nextId})}" class="btn btn-outline-secondary">
+            Volgende →
+        </a>
+    </div>
+
     <div class="card shadow-sm">
         <div class="row g-0">
             <div class="col-md-4">

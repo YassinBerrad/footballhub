@@ -31,7 +31,25 @@ public class ClubController {
         if (id != null) {
             Optional<Club> optionalClub = clubRepository.findById(id);
 
-            optionalClub.ifPresent(club -> model.addAttribute("club", club));
+            if (optionalClub.isPresent()) {
+                model.addAttribute("club", optionalClub.get());
+
+                int maxId = (int) clubRepository.count();
+
+                int prevId = id - 1;
+                int nextId = id + 1;
+
+                if (id == 1) {
+                    prevId = maxId;
+                }
+
+                if (id == maxId) {
+                    nextId = 1;
+                }
+
+                model.addAttribute("prevId", prevId);
+                model.addAttribute("nextId", nextId);
+            }
         }
 
         return "clubdetails";
