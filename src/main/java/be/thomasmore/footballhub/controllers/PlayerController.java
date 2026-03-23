@@ -20,6 +20,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 public class PlayerController {
@@ -123,14 +124,38 @@ public class PlayerController {
             return "playercreate";
         }
 
+        String originalFileName = imageFile.getOriginalFilename();
+
+        if (originalFileName == null || originalFileName.isBlank()) {
+            model.addAttribute("imageError", "Ongeldige bestandsnaam.");
+            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("isEdit", false);
+            return "playercreate";
+        }
+
+        String lowerFileName = originalFileName.toLowerCase();
+
+        if (!(lowerFileName.endsWith(".jpg") ||
+                lowerFileName.endsWith(".jpeg") ||
+                lowerFileName.endsWith(".png") ||
+                lowerFileName.endsWith(".webp"))) {
+            model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
+            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("isEdit", false);
+            return "playercreate";
+        }
+
         try {
-            String fileName = imageFile.getOriginalFilename();
+            String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String uniqueFileName = UUID.randomUUID() + extension;
+
             Path uploadPath = Paths.get("src/main/resources/static/img");
             Files.createDirectories(uploadPath);
-            Path filePath = uploadPath.resolve(fileName);
+
+            Path filePath = uploadPath.resolve(uniqueFileName);
             Files.write(filePath, imageFile.getBytes());
 
-            player.setImageUrl("/img/" + fileName);
+            player.setImageUrl("/img/" + uniqueFileName);
         } catch (IOException e) {
             model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
             model.addAttribute("clubs", clubRepository.findAll());

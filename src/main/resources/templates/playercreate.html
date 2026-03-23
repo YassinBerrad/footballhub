@@ -55,7 +55,8 @@
 
                 <div class="mb-3" th:if="${!isEdit}">
                     <label for="imageFile" class="form-label">Afbeelding uploaden</label>
-                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept=".jpg,.jpeg,.png,.webp,image/*">
+                    <div class="form-text">Toegestaan: JPG, JPEG, PNG of WEBP</div>
                     <div class="text-danger small mt-1" th:if="${imageError}" th:text="${imageError}">
                         Afbeelding fout
                     </div>
