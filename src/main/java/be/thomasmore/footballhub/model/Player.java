@@ -6,6 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Player {
@@ -14,12 +18,24 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Naam is verplicht.")
     private String name;
+
+    @NotBlank(message = "Positie is verplicht.")
     private String position;
+
+    @NotNull(message = "Leeftijd is verplicht.")
+    @Min(value = 15, message = "Leeftijd moet minstens 15 zijn.")
+    @Max(value = 45, message = "Leeftijd mag maximum 45 zijn.")
     private Integer age;
+
+    @NotBlank(message = "Nationaliteit is verplicht.")
     private String nationality;
+
+    @NotBlank(message = "Image URL is verplicht.")
     private String imageUrl;
 
+    @NotNull(message = "Club is verplicht.")
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
 

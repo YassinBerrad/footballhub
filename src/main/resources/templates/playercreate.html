@@ -12,35 +12,50 @@
 
     <div class="card shadow-sm">
         <div class="card-body p-4">
-            <form method="post" th:action="@{/playercreate}">
+            <form method="post" th:action="@{/playercreate}" th:object="${player}">
                 <div class="mb-3">
                     <label for="name" class="form-label">Naam</label>
-                    <input type="text" id="name" name="name" class="form-control" required>
+                    <input type="text" id="name" th:field="*{name}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                        Naam fout
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="position" class="form-label">Positie</label>
-                    <input type="text" id="position" name="position" class="form-control" required>
+                    <input type="text" id="position" th:field="*{position}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">
+                        Positie fout
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="age" class="form-label">Leeftijd</label>
-                    <input type="number" id="age" name="age" class="form-control" required>
+                    <input type="number" id="age" th:field="*{age}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">
+                        Leeftijd fout
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="nationality" class="form-label">Nationaliteit</label>
-                    <input type="text" id="nationality" name="nationality" class="form-control" required>
+                    <input type="text" id="nationality" th:field="*{nationality}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}">
+                        Nationaliteit fout
+                    </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="imageUrl" class="form-label">Image URL</label>
-                    <input type="text" id="imageUrl" name="imageUrl" class="form-control" required>
+                    <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">
+                        Image URL fout
+                    </div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="clubId" class="form-label">Club</label>
-                    <select id="clubId" name="clubId" class="form-select" required>
+                    <label for="club" class="form-label">Club</label>
+                    <select id="club" th:field="*{club}" class="form-select">
                         <option value="">Kies een club</option>
                         <option th:each="club : ${clubs}"
                                 th:value="${club.id}"
@@ -48,6 +63,9 @@
                             Club naam
                         </option>
                     </select>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('club')}" th:errors="*{club}">
+                        Club fout
+                    </div>
                 </div>
 
                 <div class="d-flex gap-2">

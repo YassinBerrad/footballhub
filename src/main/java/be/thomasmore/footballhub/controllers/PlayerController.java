@@ -3,8 +3,10 @@ package be.thomasmore.footballhub.controllers;
 import be.thomasmore.footballhub.model.Player;
 import be.thomasmore.footballhub.repositories.ClubRepository;
 import be.thomasmore.footballhub.repositories.PlayerRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,26 +76,20 @@ public class PlayerController {
 
     @GetMapping("/playercreate")
     public String playerCreate(Model model) {
+        model.addAttribute("player", new Player());
         model.addAttribute("clubs", clubRepository.findAll());
         return "playercreate";
     }
 
     @PostMapping("/playercreate")
-    public String playerCreatePost(@RequestParam String name,
-                                   @RequestParam String position,
-                                   @RequestParam Integer age,
-                                   @RequestParam String nationality,
-                                   @RequestParam String imageUrl,
-                                   @RequestParam Integer clubId) {
+    public String playerCreatePost(@Valid Player player,
+                                   BindingResult bindingResult,
+                                   Model model) {
 
-        Player player = new Player();
-        player.setName(name);
-        player.setPosition(position);
-        player.setAge(age);
-        player.setNationality(nationality);
-        player.setImageUrl(imageUrl);
-
-        clubRepository.findById(clubId).ifPresent(player::setClub);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clubs", clubRepository.findAll());
+            return "playercreate";
+        }
 
         playerRepository.save(player);
 
