@@ -24,6 +24,12 @@
             Over mij
           </a>
         </li>
+        <li class="nav-item">
+          <a th:href="@{/clubdetails}"
+             th:class="${currentUrl == '/clubdetails'} ? 'nav-link active' : 'nav-link'">
+            Club details
+          </a>
+        </li>
       </ul>
     </div>
   </div>

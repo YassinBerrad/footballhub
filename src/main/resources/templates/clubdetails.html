@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Club details')}">
+    <title>FootballHub - Club details</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5" th:object="${club}">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <h1 class="card-title mb-4" th:text="*{name}">Club naam</h1>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>Stad:</strong>
+                    <span th:text="*{city}">Stad</span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Stadion:</strong>
+                    <span th:text="*{stadium}">Stadion</span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Opgericht in:</strong>
+                    <span th:text="*{foundedYear}">1900</span>
+                </li>
+                <li class="list-group-item">
+                    <strong>Afbeelding pad:</strong>
+                    <span th:text="*{imageUrl}">/img/example.jpg</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>
