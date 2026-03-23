@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="nl" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: headerelement('FootballHub - Nieuwe speler')}">
-    <title>FootballHub - Nieuwe speler</title>
+<head th:replace="~{fragments/head :: headerelement(${isEdit} ? 'FootballHub - Speler bewerken' : 'FootballHub - Nieuwe speler')}">
+    <title>FootballHub - Speler formulier</title>
 </head>
 <body>
 
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
 <main class="container py-5">
-    <h1 class="mb-4">Nieuwe speler toevoegen</h1>
+    <h1 class="mb-4" th:text="${isEdit} ? 'Speler bewerken' : 'Nieuwe speler toevoegen'">
+        Speler formulier
+    </h1>
 
     <div class="card shadow-sm">
         <div class="card-body p-4">
-            <form method="post" th:action="@{/playercreate}" th:object="${player}">
+            <form method="post"
+                  th:action="${isEdit} ? @{/playeredit} : @{/playercreate}"
+                  th:object="${player}">
+
+                <input type="hidden" th:field="*{id}">
+
                 <div class="mb-3">
                     <label for="name" class="form-label">Naam</label>
                     <input type="text" id="name" th:field="*{name}" class="form-control">
@@ -69,8 +76,10 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">
-                        Speler opslaan
+                    <button type="submit"
+                            class="btn btn-primary"
+                            th:text="${isEdit} ? 'Speler bijwerken' : 'Speler opslaan'">
+                        Opslaan
                     </button>
 
                     <a th:href="@{/playerlist}" class="btn btn-outline-secondary">

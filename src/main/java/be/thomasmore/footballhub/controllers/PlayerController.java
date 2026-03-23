@@ -78,6 +78,7 @@ public class PlayerController {
     public String playerCreate(Model model) {
         model.addAttribute("player", new Player());
         model.addAttribute("clubs", clubRepository.findAll());
+        model.addAttribute("isEdit", false);
         return "playercreate";
     }
 
@@ -88,11 +89,45 @@ public class PlayerController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("isEdit", false);
             return "playercreate";
         }
 
         playerRepository.save(player);
 
         return "redirect:/playerlist";
+    }
+
+    @GetMapping({"/playeredit", "/playeredit/{id}"})
+    public String playerEdit(@PathVariable(required = false) Integer id, Model model) {
+
+        if (id != null) {
+            Optional<Player> optionalPlayer = playerRepository.findById(id);
+
+            if (optionalPlayer.isPresent()) {
+                model.addAttribute("player", optionalPlayer.get());
+                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("isEdit", true);
+                return "playercreate";
+            }
+        }
+
+        return "redirect:/playerlist";
+    }
+
+    @PostMapping("/playeredit")
+    public String playerEditPost(@Valid Player player,
+                                 BindingResult bindingResult,
+                                 Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("isEdit", true);
+            return "playercreate";
+        }
+
+        playerRepository.save(player);
+
+        return "redirect:/playerdetails/" + player.getId();
     }
 }
