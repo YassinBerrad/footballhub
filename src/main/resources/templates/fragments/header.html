@@ -16,27 +16,49 @@
     <div class="collapse navbar-collapse" id="mainNavbar">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/}">Home</a>
+          <a class="nav-link"
+             th:classappend="${currentUrl == '/' or currentUrl == '/home'} ? ' active'"
+             th:href="@{/}">
+            Home
+          </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/about}">About</a>
+          <a class="nav-link"
+             th:classappend="${currentUrl == '/about'} ? ' active'"
+             th:href="@{/about}">
+            About
+          </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/clublist}">Clubs</a>
+          <a class="nav-link"
+             th:classappend="${#strings.startsWith(currentUrl, '/clublist') or #strings.startsWith(currentUrl, '/clubdetails') or #strings.startsWith(currentUrl, '/clubcreate') or #strings.startsWith(currentUrl, '/clubedit')} ? ' active'"
+             th:href="@{/clublist}">
+            Clubs
+          </a>
         </li>
 
         <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-          <a class="nav-link" th:href="@{/clubcreate}">Nieuwe club</a>
+          <a class="nav-link"
+             th:href="@{/clubcreate}">
+            Nieuwe club
+          </a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/playerlist}">Spelers</a>
+          <a class="nav-link"
+             th:classappend="${#strings.startsWith(currentUrl, '/playerlist') or #strings.startsWith(currentUrl, '/playerdetails') or #strings.startsWith(currentUrl, '/playercreate') or #strings.startsWith(currentUrl, '/playeredit')} ? ' active'"
+             th:href="@{/playerlist}">
+            Spelers
+          </a>
         </li>
 
         <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-          <a class="nav-link" th:href="@{/playercreate}">Nieuwe speler</a>
+          <a class="nav-link"
+             th:href="@{/playercreate}">
+            Nieuwe speler
+          </a>
         </li>
       </ul>
 
