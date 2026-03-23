@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement(${isEdit} ? 'FootballHub - Club bewerken' : 'FootballHub - Nieuwe club')}">
+    <title>FootballHub - Club formulier</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <h1 class="mb-4" th:text="${isEdit} ? 'Club bewerken' : 'Nieuwe club toevoegen'">
+        Club formulier
+    </h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form method="post"
+                  th:action="${isEdit} ? @{/clubedit} : @{/clubcreate}"
+                  th:object="${club}">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Naam</label>
+                    <input type="text" id="name" th:field="*{name}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                        Naam fout
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="city" class="form-label">Stad</label>
+                    <input type="text" id="city" th:field="*{city}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">
+                        Stad fout
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="stadium" class="form-label">Stadion</label>
+                    <input type="text" id="stadium" th:field="*{stadium}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('stadium')}" th:errors="*{stadium}">
+                        Stadion fout
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="foundedYear" class="form-label">Oprichtingsjaar</label>
+                    <input type="number" id="foundedYear" th:field="*{foundedYear}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('foundedYear')}" th:errors="*{foundedYear}">
+                        Oprichtingsjaar fout
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="imageUrl" class="form-label">Image URL</label>
+                    <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">
+                        Image URL fout
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit"
+                            class="btn btn-primary"
+                            th:text="${isEdit} ? 'Club bijwerken' : 'Club opslaan'">
+                        Opslaan
+                    </button>
+
+                    <a th:href="@{/clublist}" class="btn btn-outline-secondary">
+                        Annuleren
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>
