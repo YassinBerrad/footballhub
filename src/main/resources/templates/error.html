@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Fout')}">
+    <title>FootballHub - Fout</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-5 text-center">
+            <h1 class="display-5 mb-3">Error</h1>
+            <p class="lead mb-4">
+                Deze pagina bestaat niet of er is iets fout gegaan.
+            </p>
+
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a th:href="@{/home}" class="btn btn-primary">
+                    Terug naar home
+                </a>
+                <a th:href="@{/clublist}" class="btn btn-outline-secondary">
+                    Bekijk clubs
+                </a>
+                <a th:href="@{/playerlist}" class="btn btn-outline-secondary">
+                    Bekijk spelers
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>
