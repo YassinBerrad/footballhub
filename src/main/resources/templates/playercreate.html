@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Nieuwe speler')}">
+    <title>FootballHub - Nieuwe speler</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <h1 class="mb-4">Nieuwe speler toevoegen</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form method="post" th:action="@{/playercreate}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Naam</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="position" class="form-label">Positie</label>
+                    <input type="text" id="position" name="position" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="age" class="form-label">Leeftijd</label>
+                    <input type="number" id="age" name="age" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="nationality" class="form-label">Nationaliteit</label>
+                    <input type="text" id="nationality" name="nationality" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">Image URL</label>
+                    <input type="text" id="imageUrl" name="imageUrl" class="form-control" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="clubId" class="form-label">Club</label>
+                    <select id="clubId" name="clubId" class="form-select" required>
+                        <option value="">Kies een club</option>
+                        <option th:each="club : ${clubs}"
+                                th:value="${club.id}"
+                                th:text="${club.name}">
+                            Club naam
+                        </option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Speler opslaan
+                    </button>
+
+                    <a th:href="@{/playerlist}" class="btn btn-outline-secondary">
+                        Annuleren
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>

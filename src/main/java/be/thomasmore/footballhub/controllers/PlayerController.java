@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
@@ -69,5 +70,33 @@ public class PlayerController {
         }
 
         return "playerdetails";
+    }
+
+    @GetMapping("/playercreate")
+    public String playerCreate(Model model) {
+        model.addAttribute("clubs", clubRepository.findAll());
+        return "playercreate";
+    }
+
+    @PostMapping("/playercreate")
+    public String playerCreatePost(@RequestParam String name,
+                                   @RequestParam String position,
+                                   @RequestParam Integer age,
+                                   @RequestParam String nationality,
+                                   @RequestParam String imageUrl,
+                                   @RequestParam Integer clubId) {
+
+        Player player = new Player();
+        player.setName(name);
+        player.setPosition(position);
+        player.setAge(age);
+        player.setNationality(nationality);
+        player.setImageUrl(imageUrl);
+
+        clubRepository.findById(clubId).ifPresent(player::setClub);
+
+        playerRepository.save(player);
+
+        return "redirect:/playerlist";
     }
 }
