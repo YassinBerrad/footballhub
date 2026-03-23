@@ -126,4 +126,22 @@ public class ClubController {
 
         return "redirect:/clubdetails/" + club.getId();
     }
+
+    @PostMapping("/clubdelete/{id}")
+    public String clubDelete(@PathVariable Integer id, Model model) {
+        Optional<Club> optionalClub = clubRepository.findById(id);
+
+        if (optionalClub.isPresent()) {
+            Club club = optionalClub.get();
+
+            if (club.getPlayers() != null && !club.getPlayers().isEmpty()) {
+                model.addAttribute("deleteError", "Deze club kan niet verwijderd worden omdat er nog spelers aan gekoppeld zijn.");
+                return clubDetails(id, model);
+            }
+
+            clubRepository.deleteById(id);
+        }
+
+        return "redirect:/clublist";
+    }
 }
