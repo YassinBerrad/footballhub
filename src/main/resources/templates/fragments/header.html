@@ -25,8 +25,8 @@
           </a>
         </li>
         <li class="nav-item">
-          <a th:href="@{/clubdetails}"
-             th:class="${currentUrl == '/clubdetails'} ? 'nav-link active' : 'nav-link'">
+          <a th:href="@{/clubdetails/1}"
+             th:class="${currentUrl.startsWith('/clubdetails')} ? 'nav-link active' : 'nav-link'">
             Club details
           </a>
         </li>

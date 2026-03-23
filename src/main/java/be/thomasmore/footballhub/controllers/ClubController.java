@@ -5,6 +5,7 @@ import be.thomasmore.footballhub.repositories.ClubRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
@@ -17,11 +18,14 @@ public class ClubController {
         this.clubRepository = clubRepository;
     }
 
-    @GetMapping("/clubdetails")
-    public String clubDetails(Model model) {
-        Optional<Club> optionalClub = clubRepository.findById(1);
+    @GetMapping({"/clubdetails", "/clubdetails/{id}"})
+    public String clubDetails(@PathVariable(required = false) Integer id, Model model) {
 
-        optionalClub.ifPresent(club -> model.addAttribute("club", club));
+        if (id != null) {
+            Optional<Club> optionalClub = clubRepository.findById(id);
+
+            optionalClub.ifPresent(club -> model.addAttribute("club", club));
+        }
 
         return "clubdetails";
     }

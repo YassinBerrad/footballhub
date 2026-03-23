@@ -7,30 +7,36 @@
 
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
-<main class="container py-5" th:object="${club}">
+<main class="container py-5" th:if="${club}">
     <div class="card shadow-sm">
         <div class="card-body p-4">
-            <h1 class="card-title mb-4" th:text="*{name}">Club naam</h1>
+            <h1 class="card-title mb-4" th:text="${club.name}">Club naam</h1>
 
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <strong>Stad:</strong>
-                    <span th:text="*{city}">Stad</span>
+                    <span th:text="${club.city}">Stad</span>
                 </li>
                 <li class="list-group-item">
                     <strong>Stadion:</strong>
-                    <span th:text="*{stadium}">Stadion</span>
+                    <span th:text="${club.stadium}">Stadion</span>
                 </li>
                 <li class="list-group-item">
                     <strong>Opgericht in:</strong>
-                    <span th:text="*{foundedYear}">1900</span>
+                    <span th:text="${club.foundedYear}">1900</span>
                 </li>
                 <li class="list-group-item">
                     <strong>Afbeelding pad:</strong>
-                    <span th:text="*{imageUrl}">/img/example.jpg</span>
+                    <span th:text="${club.imageUrl}">/img/example.jpg</span>
                 </li>
             </ul>
         </div>
+    </div>
+</main>
+
+<main class="container py-5" th:unless="${club}">
+    <div class="alert alert-warning mb-0">
+        Geen geldige club gekozen.
     </div>
 </main>
 
