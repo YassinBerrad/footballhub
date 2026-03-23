@@ -9,3 +9,15 @@ VALUES ('KRC Genk', 'Genk', 'Cegeka Arena', 1988, '/img/genk.jpg');
 
 INSERT INTO CLUB (NAME, CITY, STADIUM, FOUNDED_YEAR, IMAGE_URL)
 VALUES ('Royal Antwerp FC', 'Antwerpen', 'Bosuilstadion', 1880, '/img/antwerp.jpg');
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL)
+VALUES ('Jan Vertonghen', 'Verdediger', 37, 'België', '/img/vertonghen.jpg');
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL)
+VALUES ('Kevin De Bruyne', 'Middenvelder', 33, 'België', '/img/debruyne.jpg');
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL)
+VALUES ('Romelu Lukaku', 'Aanvaller', 31, 'België', '/img/lukaku.jpg');
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL)
+VALUES ('Thibaut Courtois', 'Doelman', 32, 'België', '/img/courtois.jpg');

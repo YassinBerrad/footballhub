@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Spelers')}">
+  <title>FootballHub - Spelers</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+  <h1 class="mb-4">Spelers</h1>
+
+  <div class="list-group">
+    <a th:each="player : ${players}"
+       th:href="@{/playerdetails/{id}(id=${player.id})}"
+       class="list-group-item list-group-item-action">
+      <span th:text="${player.name}">Speler naam</span>
+      <span class="text-muted"> - </span>
+      <span class="text-muted" th:text="${player.position}">Positie</span>
+    </a>
+  </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>

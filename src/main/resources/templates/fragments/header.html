@@ -30,6 +30,12 @@
             Clubs
           </a>
         </li>
+        <li class="nav-item">
+          <a th:href="@{/playerlist}"
+             th:class="${currentUrl == '/playerlist' or currentUrl.startsWith('/playerdetails') ? 'nav-link active' : 'nav-link'}">
+            Spelers
+          </a>
+        </li>
       </ul>
     </div>
   </div>
