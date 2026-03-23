@@ -16,7 +16,8 @@
         <div class="card-body p-4">
             <form method="post"
                   th:action="${isEdit} ? @{/playeredit} : @{/playercreate}"
-                  th:object="${player}">
+                  th:object="${player}"
+                  enctype="multipart/form-data">
 
                 <input type="hidden" th:field="*{id}">
 
@@ -52,12 +53,17 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3" th:if="${!isEdit}">
+                    <label for="imageFile" class="form-label">Afbeelding uploaden</label>
+                    <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*">
+                    <div class="text-danger small mt-1" th:if="${imageError}" th:text="${imageError}">
+                        Afbeelding fout
+                    </div>
+                </div>
+
+                <div class="mb-3" th:if="${isEdit}">
                     <label for="imageUrl" class="form-label">Image URL</label>
                     <input type="text" id="imageUrl" th:field="*{imageUrl}" class="form-control">
-                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}">
-                        Image URL fout
-                    </div>
                 </div>
 
                 <div class="mb-4">

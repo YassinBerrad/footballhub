@@ -32,7 +32,6 @@ public class Player {
     @NotBlank(message = "Nationaliteit is verplicht.")
     private String nationality;
 
-    @NotBlank(message = "Image URL is verplicht.")
     private String imageUrl;
 
     @NotNull(message = "Club is verplicht.")

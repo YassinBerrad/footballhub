@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -105,9 +110,29 @@ public class PlayerController {
     @PostMapping("/playercreate")
     public String playerCreatePost(@Valid Player player,
                                    BindingResult bindingResult,
+                                   @RequestParam("imageFile") MultipartFile imageFile,
                                    Model model) {
 
-        if (bindingResult.hasErrors()) {
+        if (imageFile.isEmpty()) {
+            model.addAttribute("imageError", "Afbeelding is verplicht.");
+        }
+
+        if (bindingResult.hasErrors() || imageFile.isEmpty()) {
+            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("isEdit", false);
+            return "playercreate";
+        }
+
+        try {
+            String fileName = imageFile.getOriginalFilename();
+            Path uploadPath = Paths.get("src/main/resources/static/img");
+            Files.createDirectories(uploadPath);
+            Path filePath = uploadPath.resolve(fileName);
+            Files.write(filePath, imageFile.getBytes());
+
+            player.setImageUrl("/img/" + fileName);
+        } catch (IOException e) {
+            model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
             model.addAttribute("clubs", clubRepository.findAll());
             model.addAttribute("isEdit", false);
             return "playercreate";
