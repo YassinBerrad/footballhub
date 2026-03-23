@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -19,9 +20,18 @@ public class PlayerController {
     }
 
     @GetMapping("/playerlist")
-    public String playerList(Model model) {
-        Iterable<Player> players = playerRepository.findAll();
+    public String playerList(@RequestParam(required = false) String keyword, Model model) {
+        Iterable<Player> players;
+
+        if (keyword == null || keyword.isBlank()) {
+            players = playerRepository.findAll();
+        } else {
+            players = playerRepository.findByNameContainingIgnoreCase(keyword);
+        }
+
         model.addAttribute("players", players);
+        model.addAttribute("keyword", keyword);
+
         return "playerlist";
     }
 
