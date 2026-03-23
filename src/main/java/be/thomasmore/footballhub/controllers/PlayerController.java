@@ -26,7 +26,7 @@ public class PlayerController {
         if (keyword == null || keyword.isBlank()) {
             players = playerRepository.findAll();
         } else {
-            players = playerRepository.findByNameContainingIgnoreCase(keyword);
+            players = playerRepository.findByKeyword(keyword);
         }
 
         model.addAttribute("players", players);
