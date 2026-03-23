@@ -18,7 +18,7 @@
         </a>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-4">
         <div class="row g-0">
             <div class="col-md-4">
                 <img th:src="${club.imageUrl}"
@@ -48,6 +48,26 @@
             </div>
         </div>
     </div>
+
+    <section class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Spelers van deze club</h2>
+
+            <div class="list-group" th:if="${club.players != null and !club.players.isEmpty()}">
+                <a th:each="player : ${club.players}"
+                   th:href="@{/playerdetails/{id}(id=${player.id})}"
+                   class="list-group-item list-group-item-action">
+                    <span th:text="${player.name}">Speler naam</span>
+                    <span class="text-muted"> - </span>
+                    <span class="text-muted" th:text="${player.position}">Positie</span>
+                </a>
+            </div>
+
+            <p class="text-muted mb-0" th:if="${club.players == null or club.players.isEmpty()}">
+                Geen spelers gevonden voor deze club.
+            </p>
+        </div>
+    </section>
 </main>
 
 <main class="container py-5" th:unless="${club}">

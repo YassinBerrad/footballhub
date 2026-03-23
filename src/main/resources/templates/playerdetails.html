@@ -43,6 +43,13 @@
                             <strong>Nationaliteit:</strong>
                             <span th:text="${player.nationality}">België</span>
                         </li>
+                        <li class="list-group-item" th:if="${player.club}">
+                            <strong>Club:</strong>
+                            <a th:href="@{/clubdetails/{id}(id=${player.club.id})}"
+                               th:text="${player.club.name}">
+                                Club naam
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
