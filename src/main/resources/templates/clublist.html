@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Club overzicht')}">
+    <title>FootballHub - Club overzicht</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <h1 class="mb-4">Club overzicht</h1>
+
+    <div class="list-group">
+        <a th:each="club : ${clubs}"
+           th:href="@{/clubdetails/{id}(id=${club.id})}"
+           class="list-group-item list-group-item-action">
+            <span th:text="${club.name}">Club naam</span>
+            <span class="text-muted"> - </span>
+            <span class="text-muted" th:text="${club.city}">Stad</span>
+        </a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>

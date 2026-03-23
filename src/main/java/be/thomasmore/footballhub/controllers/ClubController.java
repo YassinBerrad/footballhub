@@ -18,6 +18,13 @@ public class ClubController {
         this.clubRepository = clubRepository;
     }
 
+    @GetMapping("/clublist")
+    public String clubList(Model model) {
+        Iterable<Club> clubs = clubRepository.findAll();
+        model.addAttribute("clubs", clubs);
+        return "clublist";
+    }
+
     @GetMapping({"/clubdetails", "/clubdetails/{id}"})
     public String clubDetails(@PathVariable(required = false) Integer id, Model model) {
 
