@@ -28,7 +28,13 @@
 
             <div class="col-md-8">
                 <div class="card-body p-4">
-                    <h1 class="card-title mb-4" th:text="${club.name}">Club naam</h1>
+                    <div class="d-flex justify-content-between align-items-start mb-4">
+                        <h1 class="card-title mb-0" th:text="${club.name}">Club naam</h1>
+
+                        <a th:href="@{/clubedit/{id}(id=${club.id})}" class="btn btn-sm btn-warning">
+                            Bewerken
+                        </a>
+                    </div>
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
@@ -40,7 +46,7 @@
                             <span th:text="${club.stadium}">Stadion</span>
                         </li>
                         <li class="list-group-item">
-                            <strong>Opgericht in:</strong>
+                            <strong>Oprichtingsjaar:</strong>
                             <span th:text="${club.foundedYear}">1900</span>
                         </li>
                     </ul>
@@ -49,25 +55,25 @@
         </div>
     </div>
 
-    <section class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
             <h2 class="h4 mb-3">Spelers van deze club</h2>
 
-            <div class="list-group" th:if="${club.players != null and !club.players.isEmpty()}">
+            <div class="list-group" th:if="${club.players != null and !#lists.isEmpty(club.players)}">
                 <a th:each="player : ${club.players}"
                    th:href="@{/playerdetails/{id}(id=${player.id})}"
                    class="list-group-item list-group-item-action">
                     <span th:text="${player.name}">Speler naam</span>
                     <span class="text-muted"> - </span>
-                    <span class="text-muted" th:text="${player.position}">Positie</span>
+                    <span th:text="${player.position}" class="text-muted">Positie</span>
                 </a>
             </div>
 
-            <p class="text-muted mb-0" th:if="${club.players == null or club.players.isEmpty()}">
-                Geen spelers gevonden voor deze club.
-            </p>
+            <div class="alert alert-info mb-0" th:if="${club.players == null or #lists.isEmpty(club.players)}">
+                Deze club heeft momenteel nog geen spelers.
+            </div>
         </div>
-    </section>
+    </div>
 </main>
 
 <main class="container py-5" th:unless="${club}">

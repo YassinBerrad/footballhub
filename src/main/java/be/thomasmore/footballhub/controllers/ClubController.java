@@ -95,4 +95,35 @@ public class ClubController {
 
         return "redirect:/clublist";
     }
+
+    @GetMapping({"/clubedit", "/clubedit/{id}"})
+    public String clubEdit(@PathVariable(required = false) Integer id, Model model) {
+
+        if (id != null) {
+            Optional<Club> optionalClub = clubRepository.findById(id);
+
+            if (optionalClub.isPresent()) {
+                model.addAttribute("club", optionalClub.get());
+                model.addAttribute("isEdit", true);
+                return "clubcreate";
+            }
+        }
+
+        return "redirect:/clublist";
+    }
+
+    @PostMapping("/clubedit")
+    public String clubEditPost(@Valid Club club,
+                               BindingResult bindingResult,
+                               Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("isEdit", true);
+            return "clubcreate";
+        }
+
+        clubRepository.save(club);
+
+        return "redirect:/clubdetails/" + club.getId();
+    }
 }
