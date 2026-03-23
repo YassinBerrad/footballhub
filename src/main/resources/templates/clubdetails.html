@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<html lang="nl"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/head :: headerelement('FootballHub - Club details')}">
     <title>FootballHub - Club details</title>
 </head>
@@ -31,7 +33,7 @@
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <h1 class="card-title mb-0" th:text="${club.name}">Club naam</h1>
 
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2" sec:authorize="hasRole('ADMIN')">
                             <a th:href="@{/clubedit/{id}(id=${club.id})}" class="btn btn-sm btn-warning">
                                 Bewerken
                             </a>
