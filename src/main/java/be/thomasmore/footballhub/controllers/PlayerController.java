@@ -1,6 +1,7 @@
 package be.thomasmore.footballhub.controllers;
 
 import be.thomasmore.footballhub.model.Player;
+import be.thomasmore.footballhub.repositories.ClubRepository;
 import be.thomasmore.footballhub.repositories.PlayerRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,23 +15,28 @@ import java.util.Optional;
 public class PlayerController {
 
     private final PlayerRepository playerRepository;
+    private final ClubRepository clubRepository;
 
-    public PlayerController(PlayerRepository playerRepository) {
+    public PlayerController(PlayerRepository playerRepository, ClubRepository clubRepository) {
         this.playerRepository = playerRepository;
+        this.clubRepository = clubRepository;
     }
 
     @GetMapping("/playerlist")
-    public String playerList(@RequestParam(required = false) String keyword, Model model) {
-        Iterable<Player> players;
+    public String playerList(@RequestParam(required = false) String keyword,
+                             @RequestParam(required = false) Integer clubId,
+                             Model model) {
 
-        if (keyword == null || keyword.isBlank()) {
-            players = playerRepository.findAll();
-        } else {
-            players = playerRepository.findByKeyword(keyword);
+        if (keyword != null && keyword.isBlank()) {
+            keyword = null;
         }
+
+        Iterable<Player> players = playerRepository.findByFilter(keyword, clubId);
 
         model.addAttribute("players", players);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("clubId", clubId);
+        model.addAttribute("clubs", clubRepository.findAll());
 
         return "playerlist";
     }

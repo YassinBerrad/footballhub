@@ -11,15 +11,27 @@
   <h1 class="mb-4">Spelers</h1>
 
   <form method="get" th:action="@{/playerlist}" class="row g-3 mb-4">
-    <div class="col-md-8">
+    <div class="col-md-5">
       <input type="text"
              name="keyword"
              class="form-control"
-             placeholder="Zoek op naam..."
+             placeholder="Zoek op naam, positie of nationaliteit..."
              th:value="${keyword}">
     </div>
 
-    <div class="col-md-4 d-flex gap-2">
+    <div class="col-md-4">
+      <select name="clubId" class="form-select">
+        <option value="">Alle clubs</option>
+        <option th:each="club : ${clubs}"
+                th:value="${club.id}"
+                th:text="${club.name}"
+                th:selected="${clubId != null and clubId == club.id}">
+          Club naam
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
       <button type="submit" class="btn btn-primary">
         Zoeken
       </button>
@@ -30,9 +42,14 @@
     </div>
   </form>
 
-  <div class="alert alert-info mb-4" th:if="${keyword != null and !keyword.isBlank()}">
-    Resultaten voor:
-    <strong th:text="${keyword}">zoekterm</strong>
+  <div class="alert alert-info mb-4" th:if="${keyword != null or clubId != null}">
+    <div th:if="${keyword != null}">
+      Keyword:
+      <strong th:text="${keyword}">zoekterm</strong>
+    </div>
+    <div th:if="${clubId != null}">
+      Club filter actief.
+    </div>
   </div>
 
   <div class="list-group" th:if="${players != null and !#lists.isEmpty(players)}">
@@ -41,7 +58,9 @@
        class="list-group-item list-group-item-action">
       <span th:text="${player.name}">Speler naam</span>
       <span class="text-muted"> - </span>
-      <span class="text-muted" th:text="${player.position}">Positie</span>
+      <span th:text="${player.position}" class="text-muted">Positie</span>
+      <span class="text-muted"> - </span>
+      <span th:text="${player.club != null ? player.club.name : 'Geen club'}" class="text-muted">Club</span>
     </a>
   </div>
 

@@ -10,9 +10,13 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
     @Query("""
             select p
             from Player p
-            where lower(p.name) like lower(concat('%', :keyword, '%'))
-               or lower(p.position) like lower(concat('%', :keyword, '%'))
-               or lower(p.nationality) like lower(concat('%', :keyword, '%'))
+            where
+                (:keyword is null or
+                    lower(p.name) like lower(concat('%', :keyword, '%')) or
+                    lower(p.position) like lower(concat('%', :keyword, '%')) or
+                    lower(p.nationality) like lower(concat('%', :keyword, '%')))
+            and
+                (:clubId is null or p.club.id = :clubId)
             """)
-    Iterable<Player> findByKeyword(@Param("keyword") String keyword);
+    Iterable<Player> findByFilter(@Param("keyword") String keyword, @Param("clubId") Integer clubId);
 }
