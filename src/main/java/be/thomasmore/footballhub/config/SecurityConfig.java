@@ -16,12 +16,17 @@ public class SecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("admin")
+        UserDetails admin = User.withUsername("admin")
                 .password(passwordEncoder.encode("admin123"))
+                .roles("ADMIN")
+                .build();
+
+        UserDetails user = User.withUsername("user")
+                .password(passwordEncoder.encode("user123"))
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(admin, user);
     }
 
     @Bean
@@ -54,8 +59,8 @@ public class SecurityConfig {
                                 "/playeredit",
                                 "/playeredit/**",
                                 "/playerdelete/**"
-                        ).authenticated()
-                        .anyRequest().permitAll()
+                        ).hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .logout(logout -> logout

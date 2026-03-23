@@ -27,7 +27,7 @@
           <a class="nav-link" th:href="@{/clublist}">Clubs</a>
         </li>
 
-        <li class="nav-item" sec:authorize="isAuthenticated()">
+        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
           <a class="nav-link" th:href="@{/clubcreate}">Nieuwe club</a>
         </li>
 
@@ -35,7 +35,7 @@
           <a class="nav-link" th:href="@{/playerlist}">Spelers</a>
         </li>
 
-        <li class="nav-item" sec:authorize="isAuthenticated()">
+        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
           <a class="nav-link" th:href="@{/playercreate}">Nieuwe speler</a>
         </li>
       </ul>
@@ -43,6 +43,12 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item" sec:authorize="isAnonymous()">
           <a class="nav-link" th:href="@{/login}">Login</a>
+        </li>
+
+        <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <span class="navbar-text me-3">
+                        Ingelogd
+                    </span>
         </li>
 
         <li class="nav-item" sec:authorize="isAuthenticated()">
