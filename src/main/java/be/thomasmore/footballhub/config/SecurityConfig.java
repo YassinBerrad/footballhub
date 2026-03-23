@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/about",
+                                "/login",
                                 "/clublist",
                                 "/clubdetails",
                                 "/clubdetails/**",
@@ -62,9 +63,13 @@ public class SecurityConfig {
                         ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll()
+                )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login?logout")
                 );
 
         return http.build();

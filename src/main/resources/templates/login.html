@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Login')}">
+    <title>FootballHub - Login</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-4 text-center">Inloggen</h1>
+
+                    <div class="alert alert-danger" th:if="${param.error}">
+                        Ongeldige gebruikersnaam of wachtwoord.
+                    </div>
+
+                    <div class="alert alert-success" th:if="${param.logout}">
+                        Je bent succesvol uitgelogd.
+                    </div>
+
+                    <form method="post" th:action="@{/login}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Gebruikersnaam</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Wachtwoord</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">
+                            Login
+                        </button>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="small text-muted">
+                        <p class="mb-1"><strong>Admin:</strong> admin / admin123</p>
+                        <p class="mb-0"><strong>User:</strong> user / user123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>
