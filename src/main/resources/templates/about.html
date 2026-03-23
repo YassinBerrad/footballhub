@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Over mij')}">
+    <title>FootballHub - Over mij</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <h1 class="card-title mb-3">Over mij</h1>
+
+            <ul class="mb-3">
+                <li>Graduaat programmeren</li>
+                <li>Project in Spring Boot en Thymeleaf</li>
+                <li>Thema: voetbal</li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Home')}">
+    <title>FootballHub - Home</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+        <div class="container-fluid py-3">
+            <h1 class="display-5 fw-bold">Welkom bij FootballHub</h1>
+            <p class="col-md-8 fs-5">
+                Dit is mijn voetbalwebsite.
+            </p>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: homefooter}"></footer>
+
+</body>
+</html>
