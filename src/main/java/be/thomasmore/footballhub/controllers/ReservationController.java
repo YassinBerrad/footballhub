@@ -96,6 +96,15 @@ public class ReservationController {
             hasErrors = true;
         }
 
+        if (startHour != null && durationHours != null) {
+            int endHour = startHour + durationHours;
+
+            if (endHour > 23) {
+                model.addAttribute("durationHoursError", "Deze reservatie eindigt te laat. Kies een kortere duur of vroeger startuur.");
+                hasErrors = true;
+            }
+        }
+
         if (hasErrors) {
             model.addAttribute("stadiums", stadiumRepository.findAll());
             model.addAttribute("selectedStadiumId", stadiumId);
@@ -123,6 +132,31 @@ public class ReservationController {
             model.addAttribute("durationHours", durationHours);
             model.addAttribute("stadiumError", "Ongeldig stadium gekozen.");
             return "reservationcreate";
+        }
+
+        Iterable<Reservation> existingReservations =
+                reservationRepository.findByStadiumIdAndReservationDateOrderByStartHourAsc(stadiumId, reservationDate);
+
+        int newStart = startHour;
+        int newEnd = startHour + durationHours;
+
+        for (Reservation existingReservation : existingReservations) {
+            int existingStart = existingReservation.getStartHour();
+            int existingEnd = existingReservation.getStartHour() + existingReservation.getDurationHours();
+
+            boolean overlaps = newStart < existingEnd && newEnd > existingStart;
+
+            if (overlaps) {
+                model.addAttribute("stadiums", stadiumRepository.findAll());
+                model.addAttribute("selectedStadiumId", stadiumId);
+                model.addAttribute("currentUsername", authentication.getName());
+                model.addAttribute("reservationDate", reservationDate);
+                model.addAttribute("startHour", startHour);
+                model.addAttribute("durationHours", durationHours);
+                model.addAttribute("reservationConflictError",
+                        "Dit stadium is al gereserveerd in dit tijdslot. Kies een ander uur of een andere datum.");
+                return "reservationcreate";
+            }
         }
 
         SiteUser siteUser = optionalUser.get();

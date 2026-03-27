@@ -12,6 +12,11 @@
 
     <div class="card shadow-sm">
         <div class="card-body p-4">
+
+            <div class="alert alert-danger mb-4" th:if="${reservationConflictError}" th:text="${reservationConflictError}">
+                Conflict fout
+            </div>
+
             <form method="post" th:action="@{/reservationcreate}">
 
                 <div class="mb-3">
