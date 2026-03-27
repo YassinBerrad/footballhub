@@ -31,8 +31,20 @@ public class ClubController {
     }
 
     @GetMapping("/clublist")
-    public String clubList(Model model) {
-        model.addAttribute("clubs", clubRepository.findAll());
+    public String clubList(@RequestParam(required = false) String keyword,
+                           @RequestParam(required = false) Integer minFoundedYear,
+                           Model model) {
+
+        if (keyword != null && keyword.isBlank()) {
+            keyword = null;
+        }
+
+        Iterable<Club> clubs = clubRepository.findByFilter(keyword, minFoundedYear);
+
+        model.addAttribute("clubs", clubs);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("minFoundedYear", minFoundedYear);
+
         return "clublist";
     }
 

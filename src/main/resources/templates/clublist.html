@@ -10,14 +10,61 @@
 <main class="container py-5">
     <h1 class="mb-4">Club overzicht</h1>
 
-    <div class="list-group">
+    <form method="get" th:action="@{/clublist}" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <input type="text"
+                   name="keyword"
+                   class="form-control"
+                   placeholder="Zoek op naam, stad of stadion..."
+                   th:value="${keyword}">
+        </div>
+
+        <div class="col-md-3">
+            <input type="number"
+                   name="minFoundedYear"
+                   class="form-control"
+                   placeholder="Min. oprichtingsjaar"
+                   th:value="${minFoundedYear}">
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                Zoeken
+            </button>
+
+            <a th:href="@{/clublist}" class="btn btn-outline-secondary">
+                Reset
+            </a>
+        </div>
+    </form>
+
+    <div class="alert alert-info mb-4" th:if="${keyword != null or minFoundedYear != null}">
+        <div th:if="${keyword != null}">
+            Keyword:
+            <strong th:text="${keyword}">zoekterm</strong>
+        </div>
+        <div th:if="${minFoundedYear != null}">
+            Minimum oprichtingsjaar:
+            <strong th:text="${minFoundedYear}">1900</strong>
+        </div>
+    </div>
+
+    <div class="list-group" th:if="${clubs != null and !#lists.isEmpty(clubs)}">
         <a th:each="club : ${clubs}"
            th:href="@{/clubdetails/{id}(id=${club.id})}"
            class="list-group-item list-group-item-action">
             <span th:text="${club.name}">Club naam</span>
             <span class="text-muted"> - </span>
             <span class="text-muted" th:text="${club.city}">Stad</span>
+            <span class="text-muted"> - </span>
+            <span class="text-muted" th:text="${club.stadium}">Stadion</span>
+            <span class="text-muted"> - </span>
+            <span class="text-muted" th:text="${club.foundedYear}">1900</span>
         </a>
+    </div>
+
+    <div class="alert alert-warning mb-0" th:if="${clubs == null or #lists.isEmpty(clubs)}">
+        Geen clubs gevonden.
     </div>
 </main>
 
