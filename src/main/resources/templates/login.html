@@ -22,6 +22,10 @@
                         Je bent succesvol uitgelogd.
                     </div>
 
+                    <div class="alert alert-success" th:if="${param.registered}">
+                        Je account werd succesvol aangemaakt. Je kan nu inloggen.
+                    </div>
+
                     <form method="post" th:action="@{/login}">
                         <div class="mb-3">
                             <label for="username" class="form-label">Gebruikersnaam</label>
@@ -40,9 +44,17 @@
 
                     <hr class="my-4">
 
+                    <div class="text-center">
+                        <p class="mb-2">Nog geen account?</p>
+                        <a th:href="@{/register}" class="btn btn-outline-secondary w-100">
+                            Registreer hier
+                        </a>
+                    </div>
+
+                    <hr class="my-4">
+
                     <div class="small text-muted">
-                        <p class="mb-1"><strong>Admin:</strong> admin / admin123</p>
-                        <p class="mb-0"><strong>User:</strong> user / user123</p>
+                        <p class="mb-0"><strong>Admin:</strong> admin / admin123</p>
                     </div>
                 </div>
             </div>

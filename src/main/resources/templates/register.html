@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Registreren')}">
+    <title>FootballHub - Registreren</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h3 mb-4 text-center">Account aanmaken</h1>
+
+                    <form method="post" th:action="@{/register}" th:object="${siteUser}">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Gebruikersnaam</label>
+                            <input type="text" id="username" th:field="*{username}" class="form-control">
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                Gebruikersnaam fout
+                            </div>
+                            <div class="text-danger small mt-1" th:if="${usernameError}" th:text="${usernameError}">
+                                Gebruikersnaam bestaat al
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Wachtwoord</label>
+                            <input type="password" id="password" th:field="*{password}" class="form-control">
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                                Wachtwoord fout
+                            </div>
+                            <div class="text-danger small mt-1" th:if="${passwordError}" th:text="${passwordError}">
+                                Wachtwoord fout
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label">Bevestig wachtwoord</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+                            <div class="text-danger small mt-1" th:if="${confirmPasswordError}" th:text="${confirmPasswordError}">
+                                Bevestiging fout
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                Registreren
+                            </button>
+
+                            <a th:href="@{/login}" class="btn btn-outline-secondary">
+                                Annuleren
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>
