@@ -12,7 +12,7 @@
 
     <div class="card shadow-sm">
         <div class="card-body p-4">
-            <form method="post" th:action="@{/reservationcreate}" th:object="${reservation}">
+            <form method="post" th:action="@{/reservationcreate}">
 
                 <div class="mb-3">
                     <label class="form-label">Gebruiker</label>
@@ -20,18 +20,16 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="stadium" class="form-label">Stadium</label>
-                    <select id="stadium" th:field="*{stadium}" class="form-select">
+                    <label for="stadiumId" class="form-label">Stadium</label>
+                    <select id="stadiumId" name="stadiumId" class="form-select">
                         <option value="">Kies een stadium</option>
                         <option th:each="stadium : ${stadiums}"
                                 th:value="${stadium.id}"
-                                th:text="${stadium.name + ' (' + stadium.city + ') - ' + stadium.pricePerHour + ' €/uur'}">
+                                th:text="${stadium.name + ' (' + stadium.city + ') - ' + stadium.pricePerHour + ' €/uur'}"
+                                th:selected="${selectedStadiumId != null and selectedStadiumId == stadium.id}">
                             Stadium
                         </option>
                     </select>
-                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('stadium')}" th:errors="*{stadium}">
-                        Stadium fout
-                    </div>
                     <div class="text-danger small mt-1" th:if="${stadiumError}" th:text="${stadiumError}">
                         Stadium fout
                     </div>
@@ -39,26 +37,26 @@
 
                 <div class="mb-3">
                     <label for="reservationDate" class="form-label">Datum</label>
-                    <input type="date" id="reservationDate" th:field="*{reservationDate}" class="form-control">
-                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('reservationDate')}" th:errors="*{reservationDate}">
+                    <input type="date" id="reservationDate" name="reservationDate" class="form-control" th:value="${reservationDate}">
+                    <div class="text-danger small mt-1" th:if="${reservationDateError}" th:text="${reservationDateError}">
                         Datum fout
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="startHour" class="form-label">Startuur</label>
-                    <input type="number" id="startHour" th:field="*{startHour}" class="form-control">
+                    <input type="number" id="startHour" name="startHour" class="form-control" th:value="${startHour}">
                     <div class="form-text">Toegelaten tussen 8 en 22 uur.</div>
-                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('startHour')}" th:errors="*{startHour}">
+                    <div class="text-danger small mt-1" th:if="${startHourError}" th:text="${startHourError}">
                         Startuur fout
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <label for="durationHours" class="form-label">Duur (uren)</label>
-                    <input type="number" id="durationHours" th:field="*{durationHours}" class="form-control">
+                    <input type="number" id="durationHours" name="durationHours" class="form-control" th:value="${durationHours}">
                     <div class="form-text">Minimum 1 uur, maximum 8 uur.</div>
-                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('durationHours')}" th:errors="*{durationHours}">
+                    <div class="text-danger small mt-1" th:if="${durationHoursError}" th:text="${durationHoursError}">
                         Duur fout
                     </div>
                 </div>

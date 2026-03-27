@@ -6,11 +6,9 @@ import be.thomasmore.footballhub.model.Stadium;
 import be.thomasmore.footballhub.repositories.ReservationRepository;
 import be.thomasmore.footballhub.repositories.SiteUserRepository;
 import be.thomasmore.footballhub.repositories.StadiumRepository;
-import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,32 +50,59 @@ public class ReservationController {
                                     Authentication authentication,
                                     Model model) {
 
-        Reservation reservation = new Reservation();
-        reservation.setReservationDate(LocalDate.now().plusDays(1));
-        reservation.setStartHour(18);
-        reservation.setDurationHours(2);
-
-        if (stadiumId != null) {
-            Optional<Stadium> optionalStadium = stadiumRepository.findById(stadiumId);
-            optionalStadium.ifPresent(reservation::setStadium);
-        }
-
-        model.addAttribute("reservation", reservation);
         model.addAttribute("stadiums", stadiumRepository.findAll());
+        model.addAttribute("selectedStadiumId", stadiumId);
         model.addAttribute("currentUsername", authentication.getName());
+        model.addAttribute("reservationDate", LocalDate.now().plusDays(1));
+        model.addAttribute("startHour", 18);
+        model.addAttribute("durationHours", 2);
 
         return "reservationcreate";
     }
 
     @PostMapping("/reservationcreate")
-    public String reservationCreatePost(@Valid Reservation reservation,
-                                        BindingResult bindingResult,
+    public String reservationCreatePost(@RequestParam(required = false) Integer stadiumId,
+                                        @RequestParam(required = false) LocalDate reservationDate,
+                                        @RequestParam(required = false) Integer startHour,
+                                        @RequestParam(required = false) Integer durationHours,
                                         Authentication authentication,
                                         Model model) {
 
-        if (bindingResult.hasErrors()) {
+        boolean hasErrors = false;
+
+        if (stadiumId == null) {
+            model.addAttribute("stadiumError", "Kies een stadium.");
+            hasErrors = true;
+        }
+
+        if (reservationDate == null) {
+            model.addAttribute("reservationDateError", "Datum is verplicht.");
+            hasErrors = true;
+        }
+
+        if (startHour == null) {
+            model.addAttribute("startHourError", "Startuur is verplicht.");
+            hasErrors = true;
+        } else if (startHour < 8 || startHour > 22) {
+            model.addAttribute("startHourError", "Startuur moet tussen 8 en 22 liggen.");
+            hasErrors = true;
+        }
+
+        if (durationHours == null) {
+            model.addAttribute("durationHoursError", "Duur is verplicht.");
+            hasErrors = true;
+        } else if (durationHours < 1 || durationHours > 8) {
+            model.addAttribute("durationHoursError", "Duur moet tussen 1 en 8 uur liggen.");
+            hasErrors = true;
+        }
+
+        if (hasErrors) {
             model.addAttribute("stadiums", stadiumRepository.findAll());
+            model.addAttribute("selectedStadiumId", stadiumId);
             model.addAttribute("currentUsername", authentication.getName());
+            model.addAttribute("reservationDate", reservationDate);
+            model.addAttribute("startHour", startHour);
+            model.addAttribute("durationHours", durationHours);
             return "reservationcreate";
         }
 
@@ -87,11 +112,15 @@ public class ReservationController {
             return "redirect:/login";
         }
 
-        Optional<Stadium> optionalStadium = stadiumRepository.findById(reservation.getStadium().getId());
+        Optional<Stadium> optionalStadium = stadiumRepository.findById(stadiumId);
 
         if (optionalStadium.isEmpty()) {
             model.addAttribute("stadiums", stadiumRepository.findAll());
+            model.addAttribute("selectedStadiumId", stadiumId);
             model.addAttribute("currentUsername", authentication.getName());
+            model.addAttribute("reservationDate", reservationDate);
+            model.addAttribute("startHour", startHour);
+            model.addAttribute("durationHours", durationHours);
             model.addAttribute("stadiumError", "Ongeldig stadium gekozen.");
             return "reservationcreate";
         }
@@ -99,9 +128,13 @@ public class ReservationController {
         SiteUser siteUser = optionalUser.get();
         Stadium stadium = optionalStadium.get();
 
+        Reservation reservation = new Reservation();
+        reservation.setReservationDate(reservationDate);
+        reservation.setStartHour(startHour);
+        reservation.setDurationHours(durationHours);
         reservation.setSiteUser(siteUser);
         reservation.setStadium(stadium);
-        reservation.setTotalPrice(stadium.getPricePerHour() * reservation.getDurationHours());
+        reservation.setTotalPrice(stadium.getPricePerHour() * durationHours);
 
         reservationRepository.save(reservation);
 
