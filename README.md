@@ -1,8 +1,8 @@
 # FootballHub
 
 FootballHub is een webapplicatie voor voetballiefhebbers en recreatieve spelers.
-Gebruikers kunnen voetbalclubs, spelers en stadions ontdekken en een stadium reserveren.
-Admins kunnen clubs, spelers, stadions en reservaties beheren.
+Gebruikers kunnen voetbalclubs, spelers en stadions ontdekken, en ingelogde gebruikers kunnen stadions reserveren.
+Admins kunnen daarnaast clubs, spelers, stadions en reservaties beheren via een beveiligde beheeromgeving.
 
 ---
 
@@ -12,7 +12,7 @@ Admins kunnen clubs, spelers, stadions en reservaties beheren.
 * [Productbeschrijving](#productbeschrijving)
 * [Feedback verwerkt](#feedback-verwerkt)
 * [User Story Map](#user-story-map)
-* [Personas](#personas)
+* [Persona's](#personas)
 * [Conceptueel model](#conceptueel-model)
 * [Functionele analyse](#functionele-analyse)
 * [Wireframes](#wireframes)
@@ -21,6 +21,7 @@ Admins kunnen clubs, spelers, stadions en reservaties beheren.
 * [Sequence Diagram](#sequence-diagram)
 * [Class Diagram](#class-diagram)
 * [State Transition Diagram](#state-transition-diagram)
+* [Besluit](#besluit)
 
 ---
 
@@ -28,7 +29,12 @@ Admins kunnen clubs, spelers, stadions en reservaties beheren.
 
 FootballHub wil een centraal platform zijn waar gebruikers eenvoudig informatie kunnen vinden over voetbalclubs, spelers en stadions, én waar ze op een gebruiksvriendelijke manier een stadium kunnen reserveren.
 
-De applicatie combineert informatieve content met praktische functionaliteit via een reservatiesysteem. Voor admins biedt het platform ook een centrale beheeromgeving.
+De applicatie combineert twee doelen:
+
+* **informatie aanbieden** over voetbalgerelateerde entiteiten (clubs, spelers, stadions)
+* **praktische functionaliteit bieden** via een reservatiesysteem voor stadions
+
+Voor admins biedt FootballHub daarnaast een eenvoudige beheeromgeving om alle data en reservaties centraal te beheren.
 
 ---
 
@@ -41,55 +47,70 @@ FootballHub is een webapplicatie waarin gebruikers:
 * voetbalclubs kunnen bekijken
 * spelers kunnen bekijken en filteren
 * stadions kunnen bekijken
-* een stadium kunnen reserveren op datum en tijd
+* details van clubs, spelers en stadions kunnen raadplegen
+* een stadium kunnen reserveren (na inloggen)
 
 Admins kunnen daarnaast:
 
-* clubs beheren
-* spelers beheren
-* stadions beheren
-* alle reservaties bekijken en verwijderen
+* clubs aanmaken, aanpassen en verwijderen
+* spelers aanmaken, aanpassen en verwijderen
+* stadions aanmaken, aanpassen en verwijderen
+* alle reservaties bekijken
+* reservaties verwijderen
 
 ## Voor wie?
 
 FootballHub is bedoeld voor:
 
-* recreatieve voetballers of vriendengroepen die een stadium willen huren
-* voetbalfans die informatie willen bekijken over clubs en spelers
-* beheerders/admins die het platform beheren
+* **recreatieve voetballers** of vriendengroepen die een stadium willen huren
+* **voetbalfans** die informatie willen bekijken over clubs en spelers
+* **admins / beheerders** die de inhoud van het platform en de reservaties beheren
 
 ## Waarom?
 
 FootballHub centraliseert informatie en reservaties in één platform.
 
-**Voordelen voor gebruikers:**
+### Voordelen voor gebruikers
 
-* snel een stadium vinden en reserveren
+* snel clubs, spelers en stadions terugvinden
+* een stadium online reserveren zonder manuele communicatie
 * overzicht van eigen reservaties
-* voetbalinformatie op één plek
+* duidelijke foutmeldingen bij ongeldige of conflicterende reservaties
 
-**Voordelen voor beheerder:**
+### Voordelen voor admins
 
-* eenvoudige centrale administratie van clubs, spelers, stadions en reservaties
-* minder manueel werk
-* minder fouten door automatische validaties zoals reservatieconflicten
+* centrale administratie van clubs, spelers en stadions
+* overzicht van alle reservaties
+* minder fouten dankzij validaties en business rules
+
+### Voordeel voor het project
+
+* duidelijke rollenstructuur
+* logische domeinrelaties
+* realistische business flow via reservaties
+* geschikt als analyse- en ontwikkelproject
 
 ---
 
 # Feedback verwerkt
 
-Tijdens de tussentijdse voorstelling en lessen werd de analyse verder verfijnd.
+Tijdens de tussentijdse voorstelling en tijdens de lessen werd de analyse verfijnd en verder uitgewerkt.
 
 ## Verwerkte feedback
 
-* De **User Story Map** werd duidelijker opgesplitst in backbone, activiteiten en drie slices: **MVP**, **must-have** en **nice-to-have**.
-* De **persona’s** werden concreter gemaakt en beter gekoppeld aan echte gebruikersdoelen.
-* De **wireframes** werden aangepast zodat de reservatieflow duidelijker zichtbaar is.
-* De **Use Case Diagrammen** werden opgesplitst in twee delen voor betere leesbaarheid:
+* De **User Story Map** werd duidelijker opgesplitst in:
 
-    * gast + gebruiker
-    * admin
-* De **reservatieflow** werd extra uitgewerkt omdat dit de belangrijkste business flow van de applicatie is.
+  * backbone
+  * user activiteiten
+  * stories
+  * drie slices: **MVP**, **must-have** en **nice-to-have**
+* De **3 persona’s** werden concreter gemaakt en beter afgestemd op echte gebruikers van het systeem.
+* De **wireframes** werden aangepast zodat ze beter aansluiten op de effectief gebouwde schermen in de applicatie.
+* De **Use Case Diagrammen** werden opgesplitst in twee logische delen:
+
+  * gast + gebruiker
+  * admin
+* De **reservatieflow** werd extra uitgewerkt in de activity- en sequence diagrammen omdat dit de belangrijkste business flow van FootballHub is.
 
 ---
 
@@ -99,101 +120,117 @@ Tijdens de tussentijdse voorstelling en lessen werd de analyse verder verfijnd.
 
 ## Backbone
 
-* Ontdekken
-* Account beheren
-* Reserveren
-* Beheren (admin)
+De User Story Map van FootballHub is opgebouwd rond vier hoofdactiviteiten:
 
-## Activiteiten en user stories
+* **Ontdekken**
+* **Account beheren**
+* **Reserveren**
+* **Beheren (admin)**
+
+## User stories per activiteit
 
 ### Ontdekken
 
-* Als gast wil ik clubs bekijken zodat ik informatie kan ontdekken.
+* Als gast wil ik clubs bekijken zodat ik informatie over voetbalclubs kan ontdekken.
+* Als gast wil ik clubdetails bekijken zodat ik meer informatie krijg over een club.
 * Als gast wil ik spelers bekijken zodat ik spelers kan ontdekken.
 * Als gast wil ik spelers kunnen filteren zodat ik sneller relevante spelers vind.
+* Als gast wil ik spelerdetails bekijken zodat ik meer informatie krijg over een speler.
 * Als gast wil ik stadions bekijken zodat ik een geschikt stadium kan kiezen.
+* Als gast wil ik stadiumdetails bekijken zodat ik prijs, capaciteit en beschrijving kan zien.
 
 ### Account beheren
 
-* Als bezoeker wil ik me registreren zodat ik reservaties kan maken.
+* Als bezoeker wil ik me kunnen registreren zodat ik reservaties kan maken.
 * Als gebruiker wil ik kunnen inloggen zodat ik toegang krijg tot mijn reservaties.
+* Als gebruiker wil ik kunnen uitloggen zodat mijn account veilig blijft.
 
 ### Reserveren
 
 * Als gebruiker wil ik een stadium kunnen kiezen zodat ik een reservatie kan maken.
-* Als gebruiker wil ik datum, startuur en duur kunnen kiezen zodat ik mijn reservatie kan plannen.
+* Als gebruiker wil ik een datum, startuur en duur kunnen kiezen zodat ik mijn reservatie kan plannen.
 * Als gebruiker wil ik geen overlappende reservatie kunnen maken zodat dubbele boekingen vermeden worden.
 * Als gebruiker wil ik mijn reservaties kunnen bekijken zodat ik overzicht heb.
 * Als gebruiker wil ik mijn reservatie kunnen verwijderen zodat ik flexibel blijf.
 
 ### Beheren (admin)
 
-* Als admin wil ik clubs kunnen beheren.
-* Als admin wil ik spelers kunnen beheren.
-* Als admin wil ik stadions kunnen beheren.
-* Als admin wil ik alle reservaties kunnen bekijken.
+* Als admin wil ik clubs kunnen beheren zodat de clubinformatie correct blijft.
+* Als admin wil ik spelers kunnen beheren zodat de spelersinformatie actueel blijft.
+* Als admin wil ik stadions kunnen beheren zodat reservaties op correcte data gebaseerd zijn.
+* Als admin wil ik alle reservaties kunnen bekijken zodat ik overzicht en controle heb.
+* Als admin wil ik reservaties kunnen verwijderen indien nodig.
 
 ## Slices
 
 ### MVP
 
-* clubs, spelers en stadions bekijken
-* registreren en inloggen
+* clubs bekijken
+* spelers bekijken
+* stadions bekijken
+* registreren
+* inloggen
 * reservatie maken
 * mijn reservaties bekijken
 
 ### Must-have
 
+* clubdetails bekijken
+* spelerdetails bekijken
 * spelers filteren
-* reservatievalidatie
-* overlapcontrole
-* admin CRUD voor clubs, spelers en stadions
-* admin overzicht van alle reservaties
+* stadiumdetails bekijken
+* eigen reservatie verwijderen
+* clubs beheren
+* spelers beheren
+* stadions beheren
+* alle reservaties bekijken
 
 ### Nice-to-have
 
 * reservatiestatussen
 * reservatiehistoriek
-* notificaties
+* bevestigingen of notificaties
 
 ---
 
-# Personas
+# Persona's
 
 ## Persona 1 – Milan (recreatieve speler)
 
 **Leeftijd:** 22 jaar
 **Profiel:** Student die wekelijks met vrienden voetbal speelt.
-**Doel:** Snel en eenvoudig een stadium reserveren.
+**Doel:** Snel en eenvoudig een stadium reserveren voor een voetbalavond.
 
 ### Behoeften
 
-* duidelijke reservatieflow
+* een duidelijke reservatiepagina
+* eenvoudig stadium kiezen
+* foutmeldingen wanneer een reservatie niet mogelijk is
 * overzicht van eigen reservaties
-* duidelijke prijsinformatie
 
 ### Pijnpunten
 
-* manueel reserveren is omslachtig
-* miscommunicatie over reservaties
+* manueel reserveren via berichten of telefoon kost tijd
+* onduidelijkheid over beschikbaarheid zorgt voor frustratie
 
 ---
 
 ## Persona 2 – Sarah (voetbalfan)
 
 **Leeftijd:** 28 jaar
-**Profiel:** Voetbalfan die graag clubs en spelers bekijkt.
-**Doel:** Informatie over clubs, spelers en stadions op één plek vinden.
+**Profiel:** Voetbalfan die graag informatie opzoekt over clubs en spelers.
+**Doel:** Clubs, spelers en stadions op één overzichtelijke plaats kunnen bekijken.
 
 ### Behoeften
 
-* overzichtelijke lijsten
-* filters
-* duidelijke detailpagina’s
+* duidelijke lijsten
+* filters om spelers sneller terug te vinden
+* detailpagina’s met relevante informatie
 
 ### Pijnpunten
 
 * informatie staat vaak verspreid over verschillende websites
+* het kost tijd om alles te vergelijken
 
 ---
 
@@ -201,18 +238,20 @@ Tijdens de tussentijdse voorstelling en lessen werd de analyse verder verfijnd.
 
 **Leeftijd:** 35 jaar
 **Profiel:** Beheerder van het platform.
-**Doel:** Clubs, spelers, stadions en reservaties efficiënt beheren.
+**Doel:** Clubs, spelers, stadions en reservaties efficiënt beheren via één centrale applicatie.
 
 ### Behoeften
 
 * eenvoudige beheerformulieren
+* duidelijke CRUD-functionaliteit
 * overzicht van alle reservaties
-* centrale administratie
+* controle over foutieve of verouderde data
 
 ### Pijnpunten
 
-* manuele administratie kost tijd
-* fouten in data zorgen voor verwarring
+* manuele administratie kost veel tijd
+* foutieve data leidt tot verwarring
+* zonder systeem is opvolging moeilijker
 
 ---
 
@@ -222,7 +261,7 @@ Tijdens de tussentijdse voorstelling en lessen werd de analyse verder verfijnd.
 
 ### Club
 
-Een voetbalclub met naam, stad, stadion en oprichtingsjaar.
+Een voetbalclub met basisinformatie zoals naam, stad, stadion en oprichtingsjaar.
 
 ### Player
 
@@ -230,15 +269,15 @@ Een speler met naam, positie, leeftijd, nationaliteit en een gekoppelde club.
 
 ### Stadium
 
-Een stadium dat gereserveerd kan worden. Bevat naam, stad, capaciteit, prijs per uur en beschrijving.
+Een stadium dat gereserveerd kan worden. Bevat naam, stad, capaciteit, prijs per uur, beschrijving en afbeelding.
 
 ### Reservation
 
-Een reservatie van een stadium door een gebruiker op een bepaalde datum en tijd, met duur en totale prijs.
+Een reservatie van een stadium door een gebruiker op een bepaalde datum en tijd, met een duur en een automatisch berekende totale prijs.
 
 ### SiteUser
 
-Een geregistreerde gebruiker van het systeem met een gebruikersnaam, wachtwoord en rol.
+Een geregistreerde gebruiker van het systeem met een gebruikersnaam, wachtwoord en rol (`ROLE_USER` of `ROLE_ADMIN`).
 
 ## Relaties
 
@@ -257,38 +296,151 @@ Een geregistreerde gebruiker van het systeem met een gebruikersnaam, wachtwoord 
 
 ## 1. Authenticatie
 
-* gebruiker kan registreren
-* gebruiker kan inloggen
-* gebruiker kan uitloggen
-* toegang is rolgebaseerd (`ROLE_USER`, `ROLE_ADMIN`)
+De applicatie ondersteunt gebruikersregistratie en login via Spring Security.
+
+### Functionaliteiten
+
+* registreren
+* inloggen via een custom loginpagina
+* uitloggen
+* rollen bepalen welke pagina’s toegankelijk zijn
+
+### Rollen
+
+* **Gast**
+* **Geregistreerde gebruiker (`ROLE_USER`)**
+* **Admin (`ROLE_ADMIN`)**
+
+---
 
 ## 2. Publieke informatie
 
-* clubs bekijken
+Niet-ingelogde bezoekers kunnen de informatieve onderdelen van de website gebruiken.
+
+### Clubs
+
+* clublijst bekijken
+* filteren op zoekwoord
+* filteren op minimum oprichtingsjaar
 * clubdetails bekijken
-* spelers bekijken
-* spelers filteren op zoekwoord, club, positie en leeftijd
+* navigeren naar vorige / volgende club
+
+### Players
+
+* spelerslijst bekijken
+* filteren op:
+
+  * zoekwoord
+  * club
+  * positie
+  * minimum leeftijd
+  * maximum leeftijd
 * spelerdetails bekijken
-* stadions bekijken
+* navigeren naar vorige / volgende speler
+
+### Stadiums
+
+* stadiumlijst bekijken
 * stadiumdetails bekijken
+* navigeren naar vorige / volgende stadium
+
+---
 
 ## 3. Reservaties
 
-* gebruiker kiest stadium
-* gebruiker kiest datum, startuur en duur
-* systeem valideert invoer
-* systeem controleert overlap met bestaande reservaties
-* systeem berekent totale prijs
-* gebruiker ziet eigen reservaties
-* gebruiker kan eigen reservatie verwijderen
+Een ingelogde gebruiker kan een stadium reserveren.
+
+### Reservatieformulier
+
+De pagina **Stadium reserveren** bevat:
+
+* gebruiker (readonly veld)
+* stadiumselectie via dropdown
+* datum
+* startuur
+* duur in uren
+* knop **Reservatie opslaan**
+* knop **Annuleren**
+
+### Validaties
+
+Het systeem controleert:
+
+* stadium is geselecteerd
+* datum is ingevuld
+* startuur is ingevuld
+* startuur ligt tussen **8 en 22**
+* duur is ingevuld
+* duur ligt tussen **1 en 8 uur**
+* einduur mag niet later zijn dan **23 uur**
+* er mag **geen overlap** zijn met bestaande reservaties voor hetzelfde stadium op dezelfde datum
+
+### Business rules
+
+* De totale prijs wordt automatisch berekend:
+
+  * `prijsPerUur × duur`
+* Bij conflict verschijnt een duidelijke foutmelding
+* Bij succes wordt de gebruiker doorgestuurd naar **Mijn reservaties**
+
+### Reservatiebeheer voor gebruiker
+
+* mijn reservaties bekijken
+* eigen reservaties verwijderen
+
+---
 
 ## 4. Admin beheer
 
-* clubs aanmaken, aanpassen en verwijderen
-* spelers aanmaken, aanpassen en verwijderen
-* stadions aanmaken, aanpassen en verwijderen
+Een admin heeft toegang tot beheerfunctionaliteiten.
+
+### Clubbeheer
+
+* club aanmaken
+* club aanpassen
+* club verwijderen
+
+**Extra regel:**
+Een club kan niet verwijderd worden als er nog spelers aan gekoppeld zijn.
+
+### Playerbeheer
+
+* speler aanmaken
+* speler aanpassen
+* speler verwijderen
+
+### Stadiumbeheer
+
+* stadium aanmaken
+* stadium aanpassen
+* stadium verwijderen
+
+### Reservatiebeheer
+
 * alle reservaties bekijken
 * reservaties verwijderen
+
+---
+
+## 5. Afbeeldingen uploaden
+
+Bij clubs, spelers en stadions kunnen afbeeldingen geüpload worden.
+
+### Validaties
+
+* afbeelding is verplicht bij create
+* toegelaten bestandstypes:
+
+  * `.jpg`
+  * `.jpeg`
+  * `.png`
+  * `.webp`
+
+### Opslag
+
+De afbeelding wordt opgeslagen in:
+
+* `src/main/resources/static/img`
 
 ---
 
@@ -300,43 +452,105 @@ Een geregistreerde gebruiker van het systeem met een gebruikersnaam, wachtwoord 
 
 ### Korte uitleg
 
-De homepagina is het startpunt van de applicatie.
-Van hieruit kan de gebruiker navigeren naar clubs, spelers en stadions.
+De homepagina is bewust eenvoudig opgebouwd.
+Ze bevat een navigatiebalk, een centrale welkomstsectie en een footer.
+Dit scherm dient als startpunt van de applicatie en leidt gebruikers naar de belangrijkste onderdelen van FootballHub.
 
 ---
 
-## Wireframe 2 – Reservatiepagina
+## Wireframe 2 – Stadium reserveren
 
 ![Wireframe Reservation](docs/images/wireframe-reservation.png)
 
 ### Korte uitleg
 
-De reservatiepagina is een van de belangrijkste schermen van de applicatie.
-Hier kiest een gebruiker een stadium, datum, startuur en duur om een reservatie te maken.
+De pagina **Stadium reserveren** bevat een formulier waarin een ingelogde gebruiker een stadium kan reserveren.
+Het scherm toont duidelijk alle invoervelden, foutmeldingen en acties.
+Dit is een belangrijk scherm omdat hier de kernfunctionaliteit van de applicatie plaatsvindt, inclusief validaties en conflictcontrole.
 
 ---
 
 # Use Case Diagrammen
 
+Omdat FootballHub meer dan 9 use cases bevat, zijn de use cases opgesplitst in twee logische diagrammen.
+
 ## Use Case Diagram 1 – Gast en gebruiker
 
 ![Use Case User](docs/images/use-case-user.png)
+
+### Bevat onder andere
+
+* clubs bekijken
+* clubdetails bekijken
+* spelers bekijken
+* spelerdetails bekijken
+* stadions bekijken
+* stadiumdetails bekijken
+* registreren
+* inloggen
+* reservatie maken
+* mijn reservaties bekijken
+* eigen reservatie verwijderen
+* uitloggen
+
+---
 
 ## Use Case Diagram 2 – Admin
 
 ![Use Case Admin](docs/images/use-case-admin.png)
 
+### Bevat onder andere
+
+* clubs beheren
+* spelers beheren
+* stadions beheren
+* alle reservaties bekijken
+* reservaties verwijderen
+
 ---
 
 # Activity Diagrammen
+
+Voor de analyse zijn twee belangrijke en voldoende complexe flows uitgewerkt.
 
 ## Activity Diagram 1 – Reservatie maken
 
 ![Activity Reservation](docs/images/activity-reservation.png)
 
+### Waarom deze flow?
+
+Dit is de belangrijkste business flow van de applicatie.
+Ze bevat meerdere validaties, een decision/merge en een conflictcontrole.
+
+### Samenvatting
+
+1. Gebruiker opent reservatieformulier
+2. Gebruiker vult stadium, datum, startuur en duur in
+3. Systeem valideert invoer
+4. Systeem controleert overlap
+5. Bij conflict: foutmelding
+6. Zonder conflict: prijs berekenen en reservatie opslaan
+7. Doorsturen naar **Mijn reservaties**
+
+---
+
 ## Activity Diagram 2 – Admin beheert stadium
 
 ![Activity Admin Stadium](docs/images/activity-admin-stadium.png)
+
+### Waarom deze flow?
+
+Deze flow toont een typische adminbewerking met validatie en afbeeldingscontrole.
+
+### Samenvatting
+
+1. Admin opent create/edit formulier
+2. Admin vult gegevens in
+3. Admin uploadt eventueel een afbeelding
+4. Systeem valideert formulier
+5. Systeem valideert bestandstype
+6. Bij fout: terug naar formulier
+7. Bij succes: stadium opslaan
 
 ---
 
@@ -346,11 +560,107 @@ Hier kiest een gebruiker een stadium, datum, startuur en duur om een reservatie 
 
 ![Sequence Reservation](docs/images/sequence-reservation.png)
 
+### Beschrijving
+
+Dit sequence diagram toont hoe de verschillende onderdelen samenwerken wanneer een gebruiker een reservatie maakt.
+
+### Betrokken componenten
+
+* gebruiker
+* `ReservationController`
+* `SiteUserRepository`
+* `StadiumRepository`
+* `ReservationRepository`
+* database
+
+### Samenvatting
+
+1. Gebruiker verstuurt reservatieformulier
+2. Controller haalt ingelogde gebruiker op
+3. Controller haalt stadium op
+4. Controller haalt bestaande reservaties op voor dat stadium en die datum
+5. Controller controleert overlap
+6. Bij conflict: foutmelding
+7. Bij succes: reservatie opslaan
+8. Redirect naar **Mijn reservaties**
+
 ---
 
 # Class Diagram
 
 ![Class Diagram](docs/images/class-diagram.png)
+
+## Belangrijkste domeinklassen
+
+* `SiteUser`
+* `Club`
+* `Player`
+* `Stadium`
+* `Reservation`
+
+## Belangrijkste relaties
+
+* `Club` **1 → veel** `Player`
+* `SiteUser` **1 → veel** `Reservation`
+* `Stadium` **1 → veel** `Reservation`
+
+### Korte toelichting
+
+#### SiteUser
+
+Bevat:
+
+* id
+* username
+* password
+* role
+
+#### Club
+
+Bevat:
+
+* id
+* name
+* city
+* stadium
+* foundedYear
+* imageUrl
+
+#### Player
+
+Bevat:
+
+* id
+* name
+* position
+* age
+* nationality
+* imageUrl
+* club
+
+#### Stadium
+
+Bevat:
+
+* id
+* name
+* city
+* capacity
+* pricePerHour
+* description
+* imageUrl
+
+#### Reservation
+
+Bevat:
+
+* id
+* reservationDate
+* startHour
+* durationHours
+* totalPrice
+* siteUser
+* stadium
 
 ---
 
@@ -359,3 +669,49 @@ Hier kiest een gebruiker een stadium, datum, startuur en duur om een reservatie 
 ## State Transition Diagram – Reservation
 
 ![State Reservation](docs/images/state-reservation.png)
+
+### Gekozen object
+
+Voor het state diagram werd **Reservation** gekozen, omdat dit het meest logische object is dat van toestand verandert.
+
+### Mogelijke statussen
+
+* **Draft** → gebruiker vult het formulier in
+* **Created** → reservatie werd succesvol opgeslagen
+* **Cancelled** → reservatie werd verwijderd / geannuleerd
+* **Completed** → reservatiedatum ligt in het verleden
+
+### Opmerking
+
+In de huidige code bestaat nog geen expliciete `status`-property in de `Reservation`-klasse.
+Toch is dit state diagram zinvol als **conceptuele analyse**, omdat het toont hoe een reservatie zich logisch doorheen de levenscyclus van het systeem beweegt.
+
+---
+
+# Besluit
+
+FootballHub is een webapplicatie met een duidelijke functionele scope en voldoende complexiteit voor deze analyse-opdracht.
+
+Het project bevat:
+
+* meerdere domeinobjecten
+* duidelijke relaties tussen entiteiten
+* verschillende gebruikersrollen
+* CRUD-functionaliteiten
+* authenticatie en autorisatie via Spring Security
+* een realistische business flow via stadiumreservaties
+* validaties en business rules, zoals overlapcontrole
+
+Daardoor is FootballHub een geschikt project voor:
+
+* productanalyse
+* user story mapping
+* persona’s
+* wireframes
+* use case modelling
+* activity diagrams
+* sequence diagram
+* class diagram
+* state transition diagram
+
+Deze analyse toont niet alleen hoe de applicatie functioneert, maar ook hoe de structuur, gebruikersdoelen en workflows logisch opgebouwd zijn.
