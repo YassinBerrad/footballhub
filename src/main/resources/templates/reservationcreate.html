@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Stadium reserveren')}">
+    <title>FootballHub - Stadium reserveren</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <h1 class="mb-4">Stadium reserveren</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form method="post" th:action="@{/reservationcreate}" th:object="${reservation}">
+
+                <div class="mb-3">
+                    <label class="form-label">Gebruiker</label>
+                    <input type="text" class="form-control" th:value="${currentUsername}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="stadium" class="form-label">Stadium</label>
+                    <select id="stadium" th:field="*{stadium}" class="form-select">
+                        <option value="">Kies een stadium</option>
+                        <option th:each="stadium : ${stadiums}"
+                                th:value="${stadium.id}"
+                                th:text="${stadium.name + ' (' + stadium.city + ') - ' + stadium.pricePerHour + ' €/uur'}">
+                            Stadium
+                        </option>
+                    </select>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('stadium')}" th:errors="*{stadium}">
+                        Stadium fout
+                    </div>
+                    <div class="text-danger small mt-1" th:if="${stadiumError}" th:text="${stadiumError}">
+                        Stadium fout
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="reservationDate" class="form-label">Datum</label>
+                    <input type="date" id="reservationDate" th:field="*{reservationDate}" class="form-control">
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('reservationDate')}" th:errors="*{reservationDate}">
+                        Datum fout
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="startHour" class="form-label">Startuur</label>
+                    <input type="number" id="startHour" th:field="*{startHour}" class="form-control">
+                    <div class="form-text">Toegelaten tussen 8 en 22 uur.</div>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('startHour')}" th:errors="*{startHour}">
+                        Startuur fout
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="durationHours" class="form-label">Duur (uren)</label>
+                    <input type="number" id="durationHours" th:field="*{durationHours}" class="form-control">
+                    <div class="form-text">Minimum 1 uur, maximum 8 uur.</div>
+                    <div class="text-danger small mt-1" th:if="${#fields.hasErrors('durationHours')}" th:errors="*{durationHours}">
+                        Duur fout
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Reservatie opslaan
+                    </button>
+
+                    <a th:href="@{/stadiumlist}" class="btn btn-outline-secondary">
+                        Annuleren
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>

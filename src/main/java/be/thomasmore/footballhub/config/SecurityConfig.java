@@ -65,8 +65,14 @@ public class SecurityConfig {
                                 "/stadiumcreate",
                                 "/stadiumedit",
                                 "/stadiumedit/**",
-                                "/stadiumdelete/**"
+                                "/stadiumdelete/**",
+                                "/reservationlist"
                         ).hasRole("ADMIN")
+                        .requestMatchers(
+                                "/myreservations",
+                                "/reservationcreate",
+                                "/reservationdelete/**"
+                        ).authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

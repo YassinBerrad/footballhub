@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="nl"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Mijn reservaties')}">
+    <title>FootballHub - Mijn reservaties</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5">
+    <h1 class="mb-4">Mijn reservaties</h1>
+
+    <div class="list-group" th:if="${reservations != null and !#lists.isEmpty(reservations)}">
+        <div th:each="reservation : ${reservations}" class="list-group-item">
+            <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                <div>
+                    <div class="fw-bold" th:text="${reservation.stadium.name}">Stadium naam</div>
+                    <div class="text-muted small">
+                        <span th:text="${reservation.reservationDate}">2025-01-01</span>
+                        <span> - </span>
+                        <span th:text="${reservation.startHour + ':00'}">18:00</span>
+                        <span> - </span>
+                        <span th:text="${reservation.durationHours + ' uur'}">2 uur</span>
+                    </div>
+                    <div class="small mt-1">
+                        <strong>Totaal:</strong>
+                        <span th:text="${reservation.totalPrice + ' €'}">900 €</span>
+                    </div>
+                </div>
+
+                <form method="post"
+                      th:action="@{/reservationdelete/{id}(id=${reservation.id})}"
+                      class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-danger">
+                        Annuleren
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info mb-0" th:if="${reservations == null or #lists.isEmpty(reservations)}">
+        Je hebt nog geen reservaties.
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>

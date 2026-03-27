@@ -62,13 +62,25 @@
             </li>
           </ul>
 
-          <div class="card bg-light border-0">
+          <div class="card bg-light border-0 mb-4">
             <div class="card-body">
               <h2 class="h5 mb-2">Beschrijving</h2>
               <p class="mb-0" th:text="${stadium.description}">
                 Beschrijving
               </p>
             </div>
+          </div>
+
+          <div sec:authorize="isAuthenticated()">
+            <a th:href="@{/reservationcreate(stadiumId=${stadium.id})}" class="btn btn-primary">
+              Reserveer dit stadium
+            </a>
+          </div>
+
+          <div sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="btn btn-outline-primary">
+              Log in om te reserveren
+            </a>
           </div>
         </div>
       </div>
