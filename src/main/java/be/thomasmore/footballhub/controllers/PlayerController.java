@@ -36,17 +36,27 @@ public class PlayerController {
     @GetMapping("/playerlist")
     public String playerList(@RequestParam(required = false) String keyword,
                              @RequestParam(required = false) Integer clubId,
+                             @RequestParam(required = false) String position,
+                             @RequestParam(required = false) Integer minAge,
+                             @RequestParam(required = false) Integer maxAge,
                              Model model) {
 
         if (keyword != null && keyword.isBlank()) {
             keyword = null;
         }
 
-        Iterable<Player> players = playerRepository.findByFilter(keyword, clubId);
+        if (position != null && (position.isBlank() || position.equalsIgnoreCase("all"))) {
+            position = null;
+        }
+
+        Iterable<Player> players = playerRepository.findByFilter(keyword, clubId, position, minAge, maxAge);
 
         model.addAttribute("players", players);
         model.addAttribute("keyword", keyword);
         model.addAttribute("clubId", clubId);
+        model.addAttribute("position", position);
+        model.addAttribute("minAge", minAge);
+        model.addAttribute("maxAge", maxAge);
         model.addAttribute("clubs", clubRepository.findAll());
 
         return "playerlist";

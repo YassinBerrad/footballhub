@@ -17,8 +17,19 @@ public interface PlayerRepository extends CrudRepository<Player, Integer> {
                     lower(p.nationality) like lower(concat('%', :keyword, '%')))
             and
                 (:clubId is null or p.club.id = :clubId)
+            and
+                (:position is null or lower(p.position) = lower(:position))
+            and
+                (:minAge is null or p.age >= :minAge)
+            and
+                (:maxAge is null or p.age <= :maxAge)
+            order by p.id
             """)
-    Iterable<Player> findByFilter(@Param("keyword") String keyword, @Param("clubId") Integer clubId);
+    Iterable<Player> findByFilter(@Param("keyword") String keyword,
+                                  @Param("clubId") Integer clubId,
+                                  @Param("position") String position,
+                                  @Param("minAge") Integer minAge,
+                                  @Param("maxAge") Integer maxAge);
 
     Iterable<Player> findAllByOrderByIdAsc();
 }

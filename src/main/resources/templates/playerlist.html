@@ -8,47 +8,51 @@
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
 <main class="container py-5">
-  <h1 class="mb-4">Spelers</h1>
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h1 class="mb-0">Spelers</h1>
 
-  <form method="get" th:action="@{/playerlist}" class="row g-3 mb-4">
-    <div class="col-md-5">
-      <input type="text"
-             name="keyword"
-             class="form-control"
-             placeholder="Zoek op naam, positie of nationaliteit..."
-             th:value="${keyword}">
-    </div>
-
-    <div class="col-md-4">
-      <select name="clubId" class="form-select">
-        <option value="">Alle clubs</option>
-        <option th:each="club : ${clubs}"
-                th:value="${club.id}"
-                th:text="${club.name}"
-                th:selected="${clubId != null and clubId == club.id}">
-          Club naam
-        </option>
-      </select>
-    </div>
-
-    <div class="col-md-3 d-flex gap-2">
-      <button type="submit" class="btn btn-primary">
-        Zoeken
+    <div class="d-flex gap-2">
+      <button type="button"
+              class="btn btn-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#filterModal">
+        Filters
       </button>
 
       <a th:href="@{/playerlist}" class="btn btn-outline-secondary">
         Reset
       </a>
     </div>
-  </form>
+  </div>
 
-  <div class="alert alert-info mb-4" th:if="${keyword != null or clubId != null}">
-    <div th:if="${keyword != null}">
-      Keyword:
-      <strong th:text="${keyword}">zoekterm</strong>
-    </div>
-    <div th:if="${clubId != null}">
-      Club filter actief.
+  <div class="alert alert-info mb-4"
+       th:if="${keyword != null or clubId != null or position != null or minAge != null or maxAge != null}">
+    <h2 class="h6 mb-3">Actieve filters</h2>
+
+    <div class="small">
+      <div th:if="${keyword != null}">
+        <strong>Keyword:</strong>
+        <span th:text="${keyword}">zoekterm</span>
+      </div>
+
+      <div th:if="${clubId != null}">
+        <strong>Club filter actief</strong>
+      </div>
+
+      <div th:if="${position != null}">
+        <strong>Positie:</strong>
+        <span th:text="${position}">Positie</span>
+      </div>
+
+      <div th:if="${minAge != null}">
+        <strong>Minimum leeftijd:</strong>
+        <span th:text="${minAge}">18</span>
+      </div>
+
+      <div th:if="${maxAge != null}">
+        <strong>Maximum leeftijd:</strong>
+        <span th:text="${maxAge}">35</span>
+      </div>
     </div>
   </div>
 
@@ -68,6 +72,129 @@
     Geen spelers gevonden.
   </div>
 </main>
+
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <form method="get" th:action="@{/playerlist}">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="filterModalLabel">Spelers filteren</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sluiten"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="keyword" class="form-label">Keyword</label>
+              <input type="text"
+                     id="keyword"
+                     name="keyword"
+                     class="form-control"
+                     placeholder="Zoek op naam, positie of nationaliteit..."
+                     th:value="${keyword}">
+            </div>
+
+            <div class="col-md-6">
+              <label for="clubId" class="form-label">Club</label>
+              <select id="clubId" name="clubId" class="form-select">
+                <option value="">Alle clubs</option>
+                <option th:each="club : ${clubs}"
+                        th:value="${club.id}"
+                        th:text="${club.name}"
+                        th:selected="${clubId != null and clubId == club.id}">
+                  Club naam
+                </option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label d-block mb-2">Positie</label>
+
+              <div class="d-flex flex-wrap gap-3">
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="position"
+                         id="positionAll"
+                         value="all"
+                         th:checked="${position == null}">
+                  <label class="form-check-label" for="positionAll">Allemaal</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="position"
+                         id="positionGoalkeeper"
+                         value="Doelman"
+                         th:checked="${position == 'Doelman'}">
+                  <label class="form-check-label" for="positionGoalkeeper">Doelman</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="position"
+                         id="positionDefender"
+                         value="Verdediger"
+                         th:checked="${position == 'Verdediger'}">
+                  <label class="form-check-label" for="positionDefender">Verdediger</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="position"
+                         id="positionMidfielder"
+                         value="Middenvelder"
+                         th:checked="${position == 'Middenvelder'}">
+                  <label class="form-check-label" for="positionMidfielder">Middenvelder</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input"
+                         type="radio"
+                         name="position"
+                         id="positionForward"
+                         value="Aanvaller"
+                         th:checked="${position == 'Aanvaller'}">
+                  <label class="form-check-label" for="positionForward">Aanvaller</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="minAge" class="form-label">Minimum leeftijd</label>
+              <input type="number"
+                     id="minAge"
+                     name="minAge"
+                     class="form-control"
+                     min="15"
+                     max="45"
+                     th:value="${minAge}">
+            </div>
+
+            <div class="col-md-6">
+              <label for="maxAge" class="form-label">Maximum leeftijd</label>
+              <input type="number"
+                     id="maxAge"
+                     name="maxAge"
+                     class="form-control"
+                     min="15"
+                     max="45"
+                     th:value="${maxAge}">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <a th:href="@{/playerlist}" class="btn btn-outline-secondary">Reset</a>
+          <button type="submit" class="btn btn-primary">Zoeken</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <footer th:replace="~{fragments/footer :: standardfooter}"></footer>
 
