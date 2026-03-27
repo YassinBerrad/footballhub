@@ -21,3 +21,21 @@ VALUES ('Romelu Lukaku', 'Aanvaller', 31, 'België', '/img/lukaku.jpg', 4);
 
 INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
 VALUES ('Thibaut Courtois', 'Doelman', 32, 'België', '/img/courtois.jpg', 3);
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
+VALUES ('Hans Vanaken', 'Middenvelder', 32, 'België', '/img/vanaken.jpg', 2);
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
+VALUES ('Toby Alderweireld', 'Verdediger', 36, 'België', '/img/alderweireld.jpg', 4);
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
+VALUES ('Koen Casteels', 'Doelman', 32, 'België', '/img/casteels.jpg', 1);
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
+VALUES ('Charles De Ketelaere', 'Aanvaller', 23, 'België', '/img/deketelaere.jpg', 2);
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
+VALUES ('Bryan Heynen', 'Middenvelder', 27, 'België', '/img/heynen.jpg', 3);
+
+INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
+VALUES ('Arthur Vermeeren', 'Middenvelder', 20, 'België', '/img/vermeeren.jpg', 4);
