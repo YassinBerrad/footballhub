@@ -39,3 +39,33 @@ VALUES ('Bryan Heynen', 'Middenvelder', 27, 'België', '/img/debruyne.jpg', 3);
 
 INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
 VALUES ('Arthur Vermeeren', 'Middenvelder', 20, 'België', '/img/vertonghen.jpg', 4);
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Lotto Arena Field', 'Antwerpen', 12000, 450, 'Compact modern stadion voor trainingen en kleine tornooien.', '/img/anderlecht.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Bruges Elite Stadium', 'Brugge', 22000, 650, 'Modern voetbalstadion met uitstekende grasmat en tribunes.', '/img/clubbrugge.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Genk Performance Arena', 'Genk', 18000, 550, 'Professionele voetbalinfrastructuur voor wedstrijden en events.', '/img/genk.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Bosuil Training Ground', 'Antwerpen', 15000, 500, 'Veelgebruikte locatie voor jeugdtoernooien en clubtrainingen.', '/img/antwerp.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Capital Football Dome', 'Brussel', 30000, 900, 'Grote locatie geschikt voor grote voetbalwedstrijden en evenementen.', '/img/anderlecht.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Flanders Match Arena', 'Gent', 25000, 700, 'Sterke allround locatie voor competitiematchen en tornooien.', '/img/clubbrugge.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Limburg Soccer Park', 'Hasselt', 14000, 480, 'Ideaal voor trainingskampen, oefenwedstrijden en lokale events.', '/img/genk.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('River Side Stadium', 'Mechelen', 17000, 520, 'Stadion met moderne kleedkamers en goed onderhouden veld.', '/img/antwerp.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('Belgium Pro Arena', 'Leuven', 28000, 850, 'Premium stadion met veel zitplaatsen en eventmogelijkheden.', '/img/anderlecht.jpg');
+
+INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
+VALUES ('National Football Center', 'Luik', 35000, 1100, 'Toplocatie voor grote wedstrijden, finales en voetbalactiviteiten.', '/img/clubbrugge.jpg');

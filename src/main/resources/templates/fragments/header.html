@@ -40,8 +40,7 @@
         </li>
 
         <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-          <a class="nav-link"
-             th:href="@{/clubcreate}">
+          <a class="nav-link" th:href="@{/clubcreate}">
             Nieuwe club
           </a>
         </li>
@@ -55,9 +54,22 @@
         </li>
 
         <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-          <a class="nav-link"
-             th:href="@{/playercreate}">
+          <a class="nav-link" th:href="@{/playercreate}">
             Nieuwe speler
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link"
+             th:classappend="${#strings.startsWith(currentUrl, '/stadiumlist') or #strings.startsWith(currentUrl, '/stadiumdetails') or #strings.startsWith(currentUrl, '/stadiumcreate') or #strings.startsWith(currentUrl, '/stadiumedit')} ? ' active'"
+             th:href="@{/stadiumlist}">
+            Stadiums
+          </a>
+        </li>
+
+        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+          <a class="nav-link" th:href="@{/stadiumcreate}">
+            Nieuw stadium
           </a>
         </li>
       </ul>

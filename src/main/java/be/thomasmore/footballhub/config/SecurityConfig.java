@@ -46,6 +46,9 @@ public class SecurityConfig {
                                 "/playerlist",
                                 "/playerdetails",
                                 "/playerdetails/**",
+                                "/stadiumlist",
+                                "/stadiumdetails",
+                                "/stadiumdetails/**",
                                 "/css/**",
                                 "/img/**",
                                 "/h2-console/**"
@@ -58,7 +61,11 @@ public class SecurityConfig {
                                 "/playercreate",
                                 "/playeredit",
                                 "/playeredit/**",
-                                "/playerdelete/**"
+                                "/playerdelete/**",
+                                "/stadiumcreate",
+                                "/stadiumedit",
+                                "/stadiumedit/**",
+                                "/stadiumdelete/**"
                         ).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
