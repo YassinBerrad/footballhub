@@ -30,13 +30,20 @@
                     </div>
                 </div>
 
-                <form method="post"
-                      th:action="@{/reservationdelete/{id}(id=${reservation.id})}"
-                      class="d-inline">
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        Annuleren
-                    </button>
-                </form>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/reservationdetails/{id}(id=${reservation.id})}"
+                       class="btn btn-sm btn-outline-primary">
+                        Details
+                    </a>
+
+                    <form method="post"
+                          th:action="@{/reservationdelete/{id}(id=${reservation.id})}"
+                          class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Annuleren
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

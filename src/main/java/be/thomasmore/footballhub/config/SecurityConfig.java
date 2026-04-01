@@ -71,6 +71,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/myreservations",
                                 "/reservationcreate",
+                                "/reservationdetails",
+                                "/reservationdetails/**",
                                 "/reservationdelete/**"
                         ).authenticated()
                         .anyRequest().authenticated()

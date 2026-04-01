@@ -45,6 +45,40 @@ public class ReservationController {
         return "myreservations";
     }
 
+    @GetMapping({"/reservationdetails", "/reservationdetails/{id}"})
+    public String reservationDetails(@PathVariable(required = false) Integer id,
+                                     Authentication authentication,
+                                     Model model) {
+
+        if (id == null) {
+            return "reservationdetails";
+        }
+
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if (optionalReservation.isEmpty()) {
+            return "reservationdetails";
+        }
+
+        Reservation reservation = optionalReservation.get();
+
+        boolean isOwner = reservation.getSiteUser() != null
+                && reservation.getSiteUser().getUsername().equals(authentication.getName());
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isOwner && !isAdmin) {
+            return "redirect:/myreservations";
+        }
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("endHour", reservation.getStartHour() + reservation.getDurationHours());
+        model.addAttribute("isAdmin", isAdmin);
+
+        return "reservationdetails";
+    }
+
     @GetMapping("/reservationcreate")
     public String reservationCreate(@RequestParam(required = false) Integer stadiumId,
                                     Authentication authentication,
@@ -77,6 +111,9 @@ public class ReservationController {
 
         if (reservationDate == null) {
             model.addAttribute("reservationDateError", "Datum is verplicht.");
+            hasErrors = true;
+        } else if (reservationDate.isBefore(LocalDate.now().plusDays(1))) {
+            model.addAttribute("reservationDateError", "Reservaties moeten minstens vanaf morgen zijn.");
             hasErrors = true;
         }
 

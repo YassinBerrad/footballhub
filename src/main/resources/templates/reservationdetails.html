@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="nl"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - Reservatie details')}">
+    <title>FootballHub - Reservatie details</title>
+</head>
+<body>
+
+<nav th:replace="~{fragments/header :: navbar}"></nav>
+
+<main class="container py-5" th:if="${reservation}">
+    <h1 class="mb-4">Reservatie details</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+                <h2 class="h4 mb-0">Reservatie #<span th:text="${reservation.id}">1</span></h2>
+
+                <form method="post"
+                      th:action="@{/reservationdelete/{id}(id=${reservation.id})}"
+                      class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        Reservatie annuleren
+                    </button>
+                </form>
+            </div>
+
+            <ul class="list-group list-group-flush mb-4">
+                <li class="list-group-item">
+                    <strong>Stadium:</strong>
+                    <a th:href="@{/stadiumdetails/{id}(id=${reservation.stadium.id})}"
+                       th:text="${reservation.stadium.name}">
+                        Stadium naam
+                    </a>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Gebruiker:</strong>
+                    <span th:text="${reservation.siteUser.username}">username</span>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Datum:</strong>
+                    <span th:text="${reservation.reservationDate}">2025-01-01</span>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Startuur:</strong>
+                    <span th:text="${reservation.startHour + ':00'}">18:00</span>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Einduur:</strong>
+                    <span th:text="${endHour + ':00'}">20:00</span>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Duur:</strong>
+                    <span th:text="${reservation.durationHours + ' uur'}">2 uur</span>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Prijs per uur:</strong>
+                    <span th:text="${reservation.stadium.pricePerHour + ' €'}">450 €</span>
+                </li>
+
+                <li class="list-group-item">
+                    <strong>Totaalprijs:</strong>
+                    <span th:text="${reservation.totalPrice + ' €'}">900 €</span>
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2 flex-wrap">
+                <a th:if="${isAdmin}" th:href="@{/reservationlist}" class="btn btn-outline-secondary">
+                    Terug naar alle reservaties
+                </a>
+
+                <a th:unless="${isAdmin}" th:href="@{/myreservations}" class="btn btn-outline-secondary">
+                    Terug naar mijn reservaties
+                </a>
+
+                <a th:href="@{/stadiumdetails/{id}(id=${reservation.stadium.id})}" class="btn btn-outline-primary">
+                    Bekijk stadium
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<main class="container py-5" th:unless="${reservation}">
+    <div class="alert alert-warning mb-0">
+        Geen geldige reservatie gekozen.
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+
+</body>
+</html>
