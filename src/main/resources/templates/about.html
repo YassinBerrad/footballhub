@@ -1,27 +1,144 @@
 <!DOCTYPE html>
-<html lang="nl" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/head :: headerelement('FootballHub - Over mij')}">
-    <title>FootballHub - Over mij</title>
+<html lang="nl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: headerelement('FootballHub - About')}">
+    <title>FootballHub - About</title>
 </head>
 <body>
 
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
-<main class="container py-5">
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <h1 class="card-title mb-3">Over mij</h1>
+<main>
+    <section class="bg-dark text-white position-relative overflow-hidden">
+        <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25"
+             style="background: radial-gradient(circle at top left, #198754 0%, transparent 35%), radial-gradient(circle at bottom right, #0d6efd 0%, transparent 35%);"></div>
 
-            <ul class="mb-3">
-                <li>Graduaat programmeren</li>
-                <li>Project in Spring Boot en Thymeleaf</li>
-                <li>Thema: voetbal</li>
-            </ul>
+        <div class="container py-5 position-relative">
+            <div class="row align-items-center g-5 py-lg-5">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-3">Meer dan een website — <span class="text-success">een voetbalplatform</span></h1>
+                    <p class="lead text-white-50 mb-4">
+                        FootballHub brengt clubs, spelers, stadiums en reservaties samen in één moderne omgeving.
+                        Ons doel is om voetbalbeheer eenvoudiger, sneller en overzichtelijker te maken voor iedereen.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a th:href="@{/clublist}" class="btn btn-success btn-lg px-4">Bekijk clubs</a>
+                        <a th:href="@{/stadiumlist}" class="btn btn-outline-light btn-lg px-4">Bekijk stadiums</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg rounded-4 bg-white text-dark overflow-hidden">
+                        <div class="card-body p-4 p-md-5">
+                            <h3 class="fw-bold mb-4 text-center">Onze focus</h3>
+                            <div class="row g-3 text-center">
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">🏆</div>
+                                        <h5 class="fw-bold mb-1">Clubs</h5>
+                                        <p class="text-muted small mb-0">Beheer teams en info</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">👟</div>
+                                        <h5 class="fw-bold mb-1">Spelers</h5>
+                                        <p class="text-muted small mb-0">Ontdek talenten</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">🏟️</div>
+                                        <h5 class="fw-bold mb-1">Stadiums</h5>
+                                        <p class="text-muted small mb-0">Slim reserveren</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">📅</div>
+                                        <h5 class="fw-bold mb-1">Reservaties</h5>
+                                        <p class="text-muted small mb-0">Alles in overzicht</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Onze missie</h2>
+                <p class="text-muted mb-0">Voetbalbeheer toegankelijk maken voor spelers, clubs en supporters.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">⚡</div>
+                            <h4 class="fw-bold">Snel & efficiënt</h4>
+                            <p class="text-muted mb-0">Een gebruiksvriendelijk platform dat je tijd bespaart en alles overzichtelijk houdt.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">🤝</div>
+                            <h4 class="fw-bold">Voor de community</h4>
+                            <p class="text-muted mb-0">FootballHub verbindt clubs, spelers en fans in één centrale voetbalervaring.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">🎯</div>
+                            <h4 class="fw-bold">Alles op één plek</h4>
+                            <p class="text-muted mb-0">Van spelersinformatie tot reservaties: alles wat je nodig hebt, netjes samengebracht.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-3">Waarom FootballHub uniek is</h2>
+                    <p class="text-muted mb-4">
+                        FootballHub is gebouwd met een focus op eenvoud, overzicht en een moderne gebruikerservaring.
+                        Of je nu clubs wil ontdekken, spelers wil bekijken of stadiums wil reserveren — alles voelt logisch en snel aan.
+                    </p>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">✔ Moderne en strakke interface</li>
+                        <li class="mb-3">✔ Handige navigatie voor alle voetbalonderdelen</li>
+                        <li class="mb-3">✔ Ideaal voor zowel beheer als ontdekking</li>
+                        <li class="mb-3">✔ Klaar voor verdere uitbreiding in jouw project</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+                    <div class="p-4 p-md-5 bg-success text-white rounded-4 shadow-lg">
+                        <h3 class="fw-bold mb-3">Sluit je aan bij FootballHub</h3>
+                        <p class="mb-4">Ervaar een nieuwe manier van voetbalbeheer met een frisse, moderne en gebruiksvriendelijke aanpak.</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a th:href="@{/register}" sec:authorize="isAnonymous()" class="btn btn-light btn-lg px-4">Maak een account</a>
+                            <a th:href="@{/playerlist}" class="btn btn-outline-light btn-lg px-4">Bekijk spelers</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
-<footer th:replace="~{fragments/footer :: standardfooter}"></footer>
+<footer th:replace="~{fragments/footer :: homefooter}"></footer>
 
 </body>
 </html>
