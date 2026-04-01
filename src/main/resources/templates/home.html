@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<html lang="nl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/head :: headerelement('FootballHub - Home')}">
     <title>FootballHub - Home</title>
 </head>
@@ -7,15 +8,123 @@
 
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
-<main class="container py-5">
-    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
-        <div class="container-fluid py-3">
-            <h1 class="display-5 fw-bold">Welkom bij FootballHub</h1>
-            <p class="col-md-8 fs-5">
-                Dit is mijn voetbalwebsite.
-            </p>
+<main>
+    <section class="bg-dark text-white position-relative overflow-hidden">
+        <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25"
+             style="background: radial-gradient(circle at top right, #198754 0%, transparent 35%), radial-gradient(circle at bottom left, #0d6efd 0%, transparent 35%);"></div>
+
+        <div class="container py-5 position-relative">
+            <div class="row align-items-center g-5 py-lg-5">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold lh-1 mb-3">Welkom bij <span class="text-success">FootballHub</span></h1>
+                    <p class="lead text-white-50 mb-4">
+                        Ontdek clubs, bekijk spelers, reserveer stadiums en beheer jouw voetbalervaring op één centrale plek.
+                    </p>
+
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a th:href="@{/clublist}" class="btn btn-success btn-lg px-4">Bekijk clubs</a>
+                        <a th:href="@{/playerlist}" class="btn btn-outline-light btn-lg px-4">Ontdek spelers</a>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-4 text-white-50 small">
+                        <span>✔ Clubs beheren</span>
+                        <span>✔ Spelers ontdekken</span>
+                        <span>✔ Stadiums reserveren</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-lg rounded-4 bg-white text-dark overflow-hidden">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="row g-3 text-center">
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">🏆</div>
+                                        <h3 class="fw-bold mb-1">Clubs</h3>
+                                        <p class="text-muted mb-0">Ontdek en beheer teams</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">👟</div>
+                                        <h3 class="fw-bold mb-1">Spelers</h3>
+                                        <p class="text-muted mb-0">Bekijk talent en statistieken</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">🏟️</div>
+                                        <h3 class="fw-bold mb-1">Stadiums</h3>
+                                        <p class="text-muted mb-0">Reserveer eenvoudig velden</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-4 rounded-4 bg-light h-100">
+                                        <div class="fs-1">📅</div>
+                                        <h3 class="fw-bold mb-1">Reservaties</h3>
+                                        <p class="text-muted mb-0">Hou alles overzichtelijk</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Waarom FootballHub?</h2>
+                <p class="text-muted mb-0">Een moderne en gebruiksvriendelijke plek voor elke voetbalfan.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">⚡</div>
+                            <h4 class="fw-bold">Snel & overzichtelijk</h4>
+                            <p class="text-muted mb-0">Navigeer moeiteloos tussen clubs, spelers, stadiums en reservaties.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">🔐</div>
+                            <h4 class="fw-bold">Veilig accountbeheer</h4>
+                            <p class="text-muted mb-0">Log in, registreer en beheer jouw persoonlijke voetbalomgeving veilig.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="fs-2 mb-3">🎯</div>
+                            <h4 class="fw-bold">Alles op één plek</h4>
+                            <p class="text-muted mb-0">Van teambeheer tot reservaties: alles zit handig in één platform.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="p-4 p-md-5 bg-success text-white rounded-4 shadow-lg text-center">
+                <h2 class="fw-bold mb-3">Klaar om te starten?</h2>
+                <p class="mb-4">Verken FootballHub en maak jouw voetbalbeheer slimmer en mooier.</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a th:href="@{/stadiumlist}" class="btn btn-light btn-lg px-4">Bekijk stadiums</a>
+                    <a th:href="@{/myreservations}" sec:authorize="isAuthenticated()" class="btn btn-outline-light btn-lg px-4">Mijn reservaties</a>
+                    <a th:href="@{/register}" sec:authorize="isAnonymous()" class="btn btn-outline-light btn-lg px-4">Maak een account</a>
+                </div>
+            </div>
+        </div>
+    </section>
 </main>
 
 <footer th:replace="~{fragments/footer :: homefooter}"></footer>
