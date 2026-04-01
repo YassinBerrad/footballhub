@@ -35,7 +35,7 @@ public class PlayerController {
 
     @GetMapping("/playerlist")
     public String playerList(@RequestParam(required = false) String keyword,
-                             @RequestParam(required = false) Integer clubId,
+                             @RequestParam(required = false) List<Integer> clubIds,
                              @RequestParam(required = false) String position,
                              @RequestParam(required = false) Integer minAge,
                              @RequestParam(required = false) Integer maxAge,
@@ -49,15 +49,21 @@ public class PlayerController {
             position = null;
         }
 
-        Iterable<Player> players = playerRepository.findByFilter(keyword, clubId, position, minAge, maxAge);
+        List<Player> players = new ArrayList<>();
+
+        if (clubIds == null || clubIds.isEmpty()) {
+            playerRepository.findByFilterWithoutClubs(keyword, position, minAge, maxAge).forEach(players::add);
+        } else {
+            playerRepository.findByFilterWithClubs(keyword, clubIds, position, minAge, maxAge).forEach(players::add);
+        }
 
         model.addAttribute("players", players);
         model.addAttribute("keyword", keyword);
-        model.addAttribute("clubId", clubId);
+        model.addAttribute("selectedClubIds", clubIds);
         model.addAttribute("position", position);
         model.addAttribute("minAge", minAge);
         model.addAttribute("maxAge", maxAge);
-        model.addAttribute("clubs", clubRepository.findAll());
+        model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
 
         return "playerlist";
     }
@@ -70,10 +76,15 @@ public class PlayerController {
 
             if (optionalPlayer.isPresent()) {
                 Player player = optionalPlayer.get();
+
+                if (!player.getActive()) {
+                    return "redirect:/playerlist";
+                }
+
                 model.addAttribute("player", player);
 
                 List<Player> allPlayers = new ArrayList<>();
-                playerRepository.findAllByOrderByIdAsc().forEach(allPlayers::add);
+                playerRepository.findAllByActiveTrueOrderByIdAsc().forEach(allPlayers::add);
 
                 if (!allPlayers.isEmpty()) {
                     int currentIndex = -1;
@@ -113,7 +124,7 @@ public class PlayerController {
     @GetMapping("/playercreate")
     public String playerCreate(Model model) {
         model.addAttribute("player", new Player());
-        model.addAttribute("clubs", clubRepository.findAll());
+        model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
         model.addAttribute("isEdit", false);
         return "playercreate";
     }
@@ -126,7 +137,7 @@ public class PlayerController {
 
         if (imageFile == null || imageFile.isEmpty()) {
             model.addAttribute("imageError", "Afbeelding is verplicht.");
-            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("isEdit", false);
             return "playercreate";
         }
@@ -135,7 +146,7 @@ public class PlayerController {
 
         if (originalFileName == null || originalFileName.isBlank() || !originalFileName.contains(".")) {
             model.addAttribute("imageError", "Ongeldige bestandsnaam.");
-            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("isEdit", false);
             return "playercreate";
         }
@@ -150,13 +161,13 @@ public class PlayerController {
 
         if (!validImageType) {
             model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
-            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("isEdit", false);
             return "playercreate";
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("isEdit", false);
             return "playercreate";
         }
@@ -174,11 +185,12 @@ public class PlayerController {
             player.setImageUrl("/img/" + uniqueFileName);
         } catch (IOException e) {
             model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
-            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("isEdit", false);
             return "playercreate";
         }
 
+        player.setActive(true);
         playerRepository.save(player);
 
         return "redirect:/playerlist";
@@ -191,8 +203,14 @@ public class PlayerController {
             Optional<Player> optionalPlayer = playerRepository.findById(id);
 
             if (optionalPlayer.isPresent()) {
-                model.addAttribute("player", optionalPlayer.get());
-                model.addAttribute("clubs", clubRepository.findAll());
+                Player player = optionalPlayer.get();
+
+                if (!player.getActive()) {
+                    return "redirect:/playerlist";
+                }
+
+                model.addAttribute("player", player);
+                model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
                 model.addAttribute("isEdit", true);
                 return "playercreate";
             }
@@ -208,7 +226,7 @@ public class PlayerController {
                                  Model model) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("clubs", clubRepository.findAll());
+            model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("isEdit", true);
             return "playercreate";
         }
@@ -226,7 +244,7 @@ public class PlayerController {
 
             if (originalFileName == null || originalFileName.isBlank() || !originalFileName.contains(".")) {
                 model.addAttribute("imageError", "Ongeldige bestandsnaam.");
-                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
                 model.addAttribute("isEdit", true);
                 return "playercreate";
             }
@@ -241,7 +259,7 @@ public class PlayerController {
 
             if (!validImageType) {
                 model.addAttribute("imageError", "Alleen JPG, JPEG, PNG of WEBP bestanden zijn toegestaan.");
-                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
                 model.addAttribute("isEdit", true);
                 return "playercreate";
             }
@@ -259,7 +277,7 @@ public class PlayerController {
                 player.setImageUrl("/img/" + uniqueFileName);
             } catch (IOException e) {
                 model.addAttribute("imageError", "Fout bij uploaden van de afbeelding.");
-                model.addAttribute("clubs", clubRepository.findAll());
+                model.addAttribute("clubs", clubRepository.findAllByActiveTrueOrderByIdAsc());
                 model.addAttribute("isEdit", true);
                 return "playercreate";
             }
@@ -267,6 +285,7 @@ public class PlayerController {
             player.setImageUrl(existingPlayer.getImageUrl());
         }
 
+        player.setActive(existingPlayer.getActive());
         playerRepository.save(player);
 
         return "redirect:/playerdetails/" + player.getId();
@@ -274,8 +293,12 @@ public class PlayerController {
 
     @PostMapping("/playerdelete/{id}")
     public String playerDelete(@PathVariable Integer id) {
-        if (playerRepository.existsById(id)) {
-            playerRepository.deleteById(id);
+        Optional<Player> optionalPlayer = playerRepository.findById(id);
+
+        if (optionalPlayer.isPresent()) {
+            Player player = optionalPlayer.get();
+            player.setActive(false);
+            playerRepository.save(player);
         }
 
         return "redirect:/playerlist";

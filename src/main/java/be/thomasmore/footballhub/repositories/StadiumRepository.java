@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface StadiumRepository extends CrudRepository<Stadium, Integer> {
 
-    Iterable<Stadium> findAllByOrderByIdAsc();
+    Iterable<Stadium> findAllByActiveTrueOrderByIdAsc();
 }

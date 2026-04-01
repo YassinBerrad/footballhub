@@ -56,10 +56,15 @@ public class ClubController {
 
             if (optionalClub.isPresent()) {
                 Club club = optionalClub.get();
+
+                if (!club.getActive()) {
+                    return "redirect:/clublist";
+                }
+
                 model.addAttribute("club", club);
 
                 List<Club> allClubs = new ArrayList<>();
-                clubRepository.findAll().forEach(allClubs::add);
+                clubRepository.findAllByActiveTrueOrderByIdAsc().forEach(allClubs::add);
 
                 if (!allClubs.isEmpty()) {
                     int currentIndex = -1;
@@ -156,6 +161,7 @@ public class ClubController {
             return "clubcreate";
         }
 
+        club.setActive(true);
         clubRepository.save(club);
 
         return "redirect:/clublist";
@@ -168,7 +174,13 @@ public class ClubController {
             Optional<Club> optionalClub = clubRepository.findById(id);
 
             if (optionalClub.isPresent()) {
-                model.addAttribute("club", optionalClub.get());
+                Club club = optionalClub.get();
+
+                if (!club.getActive()) {
+                    return "redirect:/clublist";
+                }
+
+                model.addAttribute("club", club);
                 model.addAttribute("isEdit", true);
                 return "clubcreate";
             }
@@ -239,6 +251,7 @@ public class ClubController {
             club.setImageUrl(existingClub.getImageUrl());
         }
 
+        club.setActive(existingClub.getActive());
         clubRepository.save(club);
 
         return "redirect:/clubdetails/" + club.getId();
@@ -252,11 +265,16 @@ public class ClubController {
             Club club = optionalClub.get();
 
             if (club.getPlayers() != null && !club.getPlayers().isEmpty()) {
-                model.addAttribute("deleteError", "Deze club kan niet verwijderd worden omdat er nog spelers aan gekoppeld zijn.");
-                return clubDetails(id, model);
+                boolean hasActivePlayers = club.getPlayers().stream().anyMatch(Player -> Player.getActive());
+
+                if (hasActivePlayers) {
+                    model.addAttribute("deleteError", "Deze club kan niet gearchiveerd worden omdat er nog actieve spelers aan gekoppeld zijn.");
+                    return clubDetails(id, model);
+                }
             }
 
-            clubRepository.deleteById(id);
+            club.setActive(false);
+            clubRepository.save(club);
         }
 
         return "redirect:/clublist";

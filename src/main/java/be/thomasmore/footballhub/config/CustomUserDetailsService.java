@@ -1,4 +1,4 @@
-package be.thomasmore.footballhub.services;
+package be.thomasmore.footballhub.config;
 
 import be.thomasmore.footballhub.model.SiteUser;
 import be.thomasmore.footballhub.repositories.SiteUserRepository;
@@ -7,11 +7,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final SiteUserRepository siteUserRepository;

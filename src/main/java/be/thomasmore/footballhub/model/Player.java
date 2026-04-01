@@ -34,6 +34,8 @@ public class Player {
 
     private String imageUrl;
 
+    private boolean active = true;
+
     @NotNull(message = "Club is verplicht.")
     @ManyToOne(fetch = FetchType.LAZY)
     private Club club;
@@ -84,6 +86,14 @@ public class Player {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Club getClub() {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="nl" xmlns:th="http://www.thymeleaf.org"
+<html lang="nl"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/head :: headerelement('FootballHub - Spelers')}">
   <title>FootballHub - Spelers</title>
@@ -46,7 +47,7 @@
       </div>
 
       <div class="alert alert-info rounded-4 border-0 shadow-sm mb-4"
-           th:if="${keyword != null or clubId != null or position != null or minAge != null or maxAge != null}">
+           th:if="${keyword != null or (selectedClubIds != null and !selectedClubIds.isEmpty()) or position != null or minAge != null or maxAge != null}">
         <h2 class="h6 mb-3 fw-bold">Actieve filters</h2>
 
         <div class="small">
@@ -55,8 +56,8 @@
             <span th:text="${keyword}">zoekterm</span>
           </div>
 
-          <div th:if="${clubId != null}">
-            <strong>Club filter actief</strong>
+          <div th:if="${selectedClubIds != null and !selectedClubIds.isEmpty()}">
+            <strong>Clubfilters actief</strong>
           </div>
 
           <div th:if="${position != null}">
@@ -76,13 +77,13 @@
         </div>
       </div>
 
-      <div class="row g-4" th:if="${players != null and !#lists.isEmpty(players)}">
+      <div class="row g-4" th:if="${players != null and !players.isEmpty()}">
         <div class="col-md-6 col-lg-4" th:each="player : ${players}">
           <a th:href="@{/playerdetails/{id}(id=${player.id})}"
              class="text-decoration-none text-dark">
             <div class="card football-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
               <img th:if="${player.imageUrl != null and !#strings.isEmpty(player.imageUrl)}"
-                   th:src="@{${player.imageUrl}}"
+                   th:src="${player.imageUrl}"
                    alt="Speler afbeelding"
                    class="w-100 football-card-image">
 
@@ -101,10 +102,6 @@
                     <strong>Leeftijd:</strong>
                     <span th:text="${player.age}">24</span>
                   </p>
-                  <p class="mb-2">
-                    <strong>Club:</strong>
-                    <span th:text="${player.club != null ? player.club.name : 'Geen club'}">Club</span>
-                  </p>
                   <p class="mb-0">
                     <strong>Nationaliteit:</strong>
                     <span th:text="${player.nationality}">Belgisch</span>
@@ -121,7 +118,7 @@
       </div>
 
       <div class="alert alert-warning rounded-4 border-0 shadow-sm mb-0"
-           th:if="${players == null or #lists.isEmpty(players)}">
+           th:if="${players == null or players.isEmpty()}">
         Geen spelers gevonden.
       </div>
     </div>
@@ -150,16 +147,22 @@
             </div>
 
             <div class="col-md-6">
-              <label for="clubId" class="form-label">Club</label>
-              <select id="clubId" name="clubId" class="form-select">
-                <option value="">Alle clubs</option>
-                <option th:each="club : ${clubs}"
-                        th:value="${club.id}"
-                        th:text="${club.name}"
-                        th:selected="${clubId != null and clubId == club.id}">
-                  Club naam
-                </option>
-              </select>
+              <label class="form-label">Clubs (checkboxes uit database)</label>
+              <div class="border rounded-3 p-3 bg-light" style="max-height: 220px; overflow-y: auto;">
+                <div class="form-check mb-2" th:each="club : ${clubs}">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         name="clubIds"
+                         th:id="'club-' + ${club.id}"
+                         th:value="${club.id}"
+                         th:checked="${selectedClubIds != null ? selectedClubIds.contains(club.id) : false}">
+                  <label class="form-check-label"
+                         th:for="'club-' + ${club.id}"
+                         th:text="${club.name}">
+                    Club naam
+                  </label>
+                </div>
+              </div>
             </div>
 
             <div class="col-12">

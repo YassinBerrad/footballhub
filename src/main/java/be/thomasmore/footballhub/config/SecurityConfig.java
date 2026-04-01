@@ -1,6 +1,5 @@
 package be.thomasmore.footballhub.config;
 
-import be.thomasmore.footballhub.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,7 +49,6 @@ public class SecurityConfig {
         http.authenticationProvider(authenticationProvider());
 
         http.authorizeHttpRequests(auth -> {
-            // publieke pagina's
             auth.requestMatchers(
                     "/",
                     "/about",
@@ -73,12 +71,10 @@ public class SecurityConfig {
                     "/img/**"
             ).permitAll();
 
-            // H2 console alleen lokaal toelaten
             if (h2ConsoleNeeded) {
                 auth.requestMatchers("/h2-console/**").permitAll();
             }
 
-            // alleen admin
             auth.requestMatchers(
                     "/clubcreate",
                     "/clubedit",
@@ -98,7 +94,6 @@ public class SecurityConfig {
                     "/reservationlist"
             ).hasRole("ADMIN");
 
-            // ingelogde users
             auth.requestMatchers(
                     "/myreservations",
                     "/reservationcreate",
@@ -107,7 +102,6 @@ public class SecurityConfig {
                     "/reservationdelete/**"
             ).authenticated();
 
-            // alles anders => login vereist
             auth.anyRequest().authenticated();
         });
 
@@ -122,7 +116,6 @@ public class SecurityConfig {
                 .permitAll()
         );
 
-        // H2 console enkel lokaal werkend maken
         if (h2ConsoleNeeded) {
             http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
             http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));

@@ -36,7 +36,7 @@ public class StadiumController {
 
     @GetMapping("/stadiumlist")
     public String stadiumList(Model model) {
-        model.addAttribute("stadiums", stadiumRepository.findAll());
+        model.addAttribute("stadiums", stadiumRepository.findAllByActiveTrueOrderByIdAsc());
         return "stadiumlist";
     }
 
@@ -50,6 +50,11 @@ public class StadiumController {
 
             if (optionalStadium.isPresent()) {
                 Stadium stadium = optionalStadium.get();
+
+                if (!stadium.getActive()) {
+                    return "redirect:/stadiumlist";
+                }
+
                 model.addAttribute("stadium", stadium);
 
                 if (deleteError != null) {
@@ -57,7 +62,7 @@ public class StadiumController {
                 }
 
                 List<Stadium> allStadiums = new ArrayList<>();
-                stadiumRepository.findAllByOrderByIdAsc().forEach(allStadiums::add);
+                stadiumRepository.findAllByActiveTrueOrderByIdAsc().forEach(allStadiums::add);
 
                 if (!allStadiums.isEmpty()) {
                     int currentIndex = -1;
@@ -154,6 +159,7 @@ public class StadiumController {
             return "stadiumcreate";
         }
 
+        stadium.setActive(true);
         stadiumRepository.save(stadium);
 
         return "redirect:/stadiumlist";
@@ -166,7 +172,13 @@ public class StadiumController {
             Optional<Stadium> optionalStadium = stadiumRepository.findById(id);
 
             if (optionalStadium.isPresent()) {
-                model.addAttribute("stadium", optionalStadium.get());
+                Stadium stadium = optionalStadium.get();
+
+                if (!stadium.getActive()) {
+                    return "redirect:/stadiumlist";
+                }
+
+                model.addAttribute("stadium", stadium);
                 model.addAttribute("isEdit", true);
                 return "stadiumcreate";
             }
@@ -237,6 +249,7 @@ public class StadiumController {
             stadium.setImageUrl(existingStadium.getImageUrl());
         }
 
+        stadium.setActive(existingStadium.getActive());
         stadiumRepository.save(stadium);
 
         return "redirect:/stadiumdetails/" + stadium.getId();
@@ -248,13 +261,19 @@ public class StadiumController {
             return "redirect:/stadiumlist";
         }
 
-        long reservationCount = reservationRepository.countByStadiumId(id);
+        long reservationCount = reservationRepository.countByStadiumIdAndActiveTrue(id);
 
         if (reservationCount > 0) {
-            return "redirect:/stadiumdetails/" + id + "?deleteError=Dit stadium kan niet verwijderd worden omdat er nog reservaties aan gekoppeld zijn.";
+            return "redirect:/stadiumdetails/" + id + "?deleteError=Dit stadium kan niet gearchiveerd worden omdat er nog actieve reservaties aan gekoppeld zijn.";
         }
 
-        stadiumRepository.deleteById(id);
+        Optional<Stadium> optionalStadium = stadiumRepository.findById(id);
+
+        if (optionalStadium.isPresent()) {
+            Stadium stadium = optionalStadium.get();
+            stadium.setActive(false);
+            stadiumRepository.save(stadium);
+        }
 
         return "redirect:/stadiumlist";
     }

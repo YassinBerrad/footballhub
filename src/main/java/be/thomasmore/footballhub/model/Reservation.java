@@ -36,6 +36,8 @@ public class Reservation {
 
     private Integer totalPrice;
 
+    private boolean active = true;
+
     @NotNull(message = "Gebruiker is verplicht.")
     @ManyToOne(fetch = FetchType.LAZY)
     private SiteUser siteUser;
@@ -82,6 +84,14 @@ public class Reservation {
 
     public void setTotalPrice(Integer totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public SiteUser getSiteUser() {

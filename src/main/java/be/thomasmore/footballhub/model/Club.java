@@ -36,6 +36,8 @@ public class Club {
 
     private String imageUrl;
 
+    private boolean active = true;
+
     @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
     private Collection<Player> players;
 
@@ -85,6 +87,14 @@ public class Club {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Collection<Player> getPlayers() {

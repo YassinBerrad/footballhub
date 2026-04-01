@@ -7,11 +7,11 @@ import java.time.LocalDate;
 
 public interface ReservationRepository extends CrudRepository<Reservation, Integer> {
 
-    Iterable<Reservation> findAllByOrderByReservationDateAscStartHourAsc();
+    Iterable<Reservation> findAllByActiveTrueOrderByReservationDateAscStartHourAsc();
 
-    Iterable<Reservation> findBySiteUserUsernameOrderByReservationDateAscStartHourAsc(String username);
+    Iterable<Reservation> findBySiteUserUsernameAndActiveTrueOrderByReservationDateAscStartHourAsc(String username);
 
-    Iterable<Reservation> findByStadiumIdAndReservationDateOrderByStartHourAsc(Integer stadiumId, LocalDate reservationDate);
+    Iterable<Reservation> findByStadiumIdAndReservationDateAndActiveTrueOrderByStartHourAsc(Integer stadiumId, LocalDate reservationDate);
 
-    long countByStadiumId(Integer stadiumId);
+    long countByStadiumIdAndActiveTrue(Integer stadiumId);
 }

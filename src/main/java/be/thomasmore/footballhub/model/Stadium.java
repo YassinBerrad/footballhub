@@ -37,6 +37,8 @@ public class Stadium {
 
     private String imageUrl;
 
+    private boolean active = true;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class Stadium {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

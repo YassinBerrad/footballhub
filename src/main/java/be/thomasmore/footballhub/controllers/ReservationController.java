@@ -34,14 +34,14 @@ public class ReservationController {
 
     @GetMapping("/reservationlist")
     public String reservationList(Model model) {
-        model.addAttribute("reservations", reservationRepository.findAllByOrderByReservationDateAscStartHourAsc());
+        model.addAttribute("reservations", reservationRepository.findAllByActiveTrueOrderByReservationDateAscStartHourAsc());
         return "reservationlist";
     }
 
     @GetMapping("/myreservations")
     public String myReservations(Authentication authentication, Model model) {
         String username = authentication.getName();
-        model.addAttribute("reservations", reservationRepository.findBySiteUserUsernameOrderByReservationDateAscStartHourAsc(username));
+        model.addAttribute("reservations", reservationRepository.findBySiteUserUsernameAndActiveTrueOrderByReservationDateAscStartHourAsc(username));
         return "myreservations";
     }
 
@@ -61,6 +61,10 @@ public class ReservationController {
         }
 
         Reservation reservation = optionalReservation.get();
+
+        if (!reservation.getActive()) {
+            return "redirect:/myreservations";
+        }
 
         boolean isOwner = reservation.getSiteUser() != null
                 && reservation.getSiteUser().getUsername().equals(authentication.getName());
@@ -84,7 +88,7 @@ public class ReservationController {
                                     Authentication authentication,
                                     Model model) {
 
-        model.addAttribute("stadiums", stadiumRepository.findAll());
+        model.addAttribute("stadiums", stadiumRepository.findAllByActiveTrueOrderByIdAsc());
         model.addAttribute("selectedStadiumId", stadiumId);
         model.addAttribute("currentUsername", authentication.getName());
         model.addAttribute("reservationDate", LocalDate.now().plusDays(1));
@@ -143,7 +147,7 @@ public class ReservationController {
         }
 
         if (hasErrors) {
-            model.addAttribute("stadiums", stadiumRepository.findAll());
+            model.addAttribute("stadiums", stadiumRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("selectedStadiumId", stadiumId);
             model.addAttribute("currentUsername", authentication.getName());
             model.addAttribute("reservationDate", reservationDate);
@@ -160,8 +164,8 @@ public class ReservationController {
 
         Optional<Stadium> optionalStadium = stadiumRepository.findById(stadiumId);
 
-        if (optionalStadium.isEmpty()) {
-            model.addAttribute("stadiums", stadiumRepository.findAll());
+        if (optionalStadium.isEmpty() || !optionalStadium.get().getActive()) {
+            model.addAttribute("stadiums", stadiumRepository.findAllByActiveTrueOrderByIdAsc());
             model.addAttribute("selectedStadiumId", stadiumId);
             model.addAttribute("currentUsername", authentication.getName());
             model.addAttribute("reservationDate", reservationDate);
@@ -172,7 +176,7 @@ public class ReservationController {
         }
 
         Iterable<Reservation> existingReservations =
-                reservationRepository.findByStadiumIdAndReservationDateOrderByStartHourAsc(stadiumId, reservationDate);
+                reservationRepository.findByStadiumIdAndReservationDateAndActiveTrueOrderByStartHourAsc(stadiumId, reservationDate);
 
         int newStart = startHour;
         int newEnd = startHour + durationHours;
@@ -184,7 +188,7 @@ public class ReservationController {
             boolean overlaps = newStart < existingEnd && newEnd > existingStart;
 
             if (overlaps) {
-                model.addAttribute("stadiums", stadiumRepository.findAll());
+                model.addAttribute("stadiums", stadiumRepository.findAllByActiveTrueOrderByIdAsc());
                 model.addAttribute("selectedStadiumId", stadiumId);
                 model.addAttribute("currentUsername", authentication.getName());
                 model.addAttribute("reservationDate", reservationDate);
@@ -206,6 +210,7 @@ public class ReservationController {
         reservation.setSiteUser(siteUser);
         reservation.setStadium(stadium);
         reservation.setTotalPrice(stadium.getPricePerHour() * durationHours);
+        reservation.setActive(true);
 
         reservationRepository.save(reservation);
 
@@ -226,7 +231,8 @@ public class ReservationController {
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
             if (isOwner || isAdmin) {
-                reservationRepository.deleteById(id);
+                reservation.setActive(false);
+                reservationRepository.save(reservation);
             }
         }
 
