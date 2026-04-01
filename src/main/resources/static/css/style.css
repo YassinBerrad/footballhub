@@ -9,3 +9,85 @@ body {
 .object-fit-cover {
     object-fit: cover;
 }
+
+.page-hero-small {
+    background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
+}
+
+.hero-overlay {
+    background:
+            radial-gradient(circle at top right, rgba(25, 135, 84, 0.9) 0%, transparent 35%),
+            radial-gradient(circle at bottom left, rgba(13, 110, 253, 0.9) 0%, transparent 35%);
+}
+
+
+.football-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(25, 135, 84, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.football-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+}
+
+
+.football-card-image-wrapper {
+    width: 100%;
+    height: 260px;
+    background: #e9ecef;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+}
+
+
+.football-card-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+}
+
+.football-card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: #6c757d;
+}
+
+.football-card .card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+}
+
+.football-info-box {
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    flex-grow: 1;
+}
+
+.club-title {
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.modal-content {
+    border-radius: 1rem;
+}
+
+@media (max-width: 767.98px) {
+    .football-card-image-wrapper {
+        height: 220px;
+    }
+}

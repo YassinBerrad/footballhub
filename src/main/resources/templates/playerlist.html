@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="nl" xmlns:th="http://www.thymeleaf.org">
+<html lang="nl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{fragments/head :: headerelement('FootballHub - Spelers')}">
   <title>FootballHub - Spelers</title>
 </head>
@@ -7,78 +8,132 @@
 
 <nav th:replace="~{fragments/header :: navbar}"></nav>
 
-<main class="container py-5">
-  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-    <h1 class="mb-0">Spelers</h1>
+<main>
+  <section class="page-hero-small bg-dark text-white position-relative overflow-hidden">
+    <div class="position-absolute top-0 start-0 w-100 h-100 opacity-25"
+         style="background: radial-gradient(circle at top left, #0d6efd 0%, transparent 35%), radial-gradient(circle at bottom right, #198754 0%, transparent 35%);"></div>
 
-    <div class="d-flex gap-2">
-      <button type="button"
-              class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#filterModal">
-        Filters
-      </button>
-
-      <a th:href="@{/playerlist}" class="btn btn-outline-secondary">
-        Reset
-      </a>
-    </div>
-  </div>
-
-  <div class="alert alert-info mb-4"
-       th:if="${keyword != null or clubId != null or position != null or minAge != null or maxAge != null}">
-    <h2 class="h6 mb-3">Actieve filters</h2>
-
-    <div class="small">
-      <div th:if="${keyword != null}">
-        <strong>Keyword:</strong>
-        <span th:text="${keyword}">zoekterm</span>
-      </div>
-
-      <div th:if="${clubId != null}">
-        <strong>Club filter actief</strong>
-      </div>
-
-      <div th:if="${position != null}">
-        <strong>Positie:</strong>
-        <span th:text="${position}">Positie</span>
-      </div>
-
-      <div th:if="${minAge != null}">
-        <strong>Minimum leeftijd:</strong>
-        <span th:text="${minAge}">18</span>
-      </div>
-
-      <div th:if="${maxAge != null}">
-        <strong>Maximum leeftijd:</strong>
-        <span th:text="${maxAge}">35</span>
+    <div class="container py-5 position-relative">
+      <div class="text-center py-4">
+        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3">👟 Spelers</span>
+        <h1 class="display-5 fw-bold">Ontdek alle spelers</h1>
+        <p class="lead text-white-50 mb-0">Bekijk talenten, posities en clubinformatie van alle spelers.</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="list-group" th:if="${players != null and !#lists.isEmpty(players)}">
-    <a th:each="player : ${players}"
-       th:href="@{/playerdetails/{id}(id=${player.id})}"
-       class="list-group-item list-group-item-action">
-      <span th:text="${player.name}">Speler naam</span>
-      <span class="text-muted"> - </span>
-      <span th:text="${player.position}" class="text-muted">Positie</span>
-      <span class="text-muted"> - </span>
-      <span th:text="${player.club != null ? player.club.name : 'Geen club'}" class="text-muted">Club</span>
-    </a>
-  </div>
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h2 class="fw-bold mb-0">Speler overzicht</h2>
 
-  <div class="alert alert-warning mb-0" th:if="${players == null or #lists.isEmpty(players)}">
-    Geen spelers gevonden.
-  </div>
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="button"
+                  class="btn btn-dark rounded-pill px-4"
+                  data-bs-toggle="modal"
+                  data-bs-target="#filterModal">
+            Filters
+          </button>
+
+          <a th:href="@{/playerlist}" class="btn btn-outline-secondary rounded-pill px-4">
+            Reset
+          </a>
+
+          <a th:href="@{/playercreate}" class="btn btn-success rounded-pill px-4" sec:authorize="hasRole('ADMIN')">
+            + Nieuwe speler
+          </a>
+        </div>
+      </div>
+
+      <div class="alert alert-info rounded-4 border-0 shadow-sm mb-4"
+           th:if="${keyword != null or clubId != null or position != null or minAge != null or maxAge != null}">
+        <h2 class="h6 mb-3 fw-bold">Actieve filters</h2>
+
+        <div class="small">
+          <div th:if="${keyword != null}">
+            <strong>Keyword:</strong>
+            <span th:text="${keyword}">zoekterm</span>
+          </div>
+
+          <div th:if="${clubId != null}">
+            <strong>Club filter actief</strong>
+          </div>
+
+          <div th:if="${position != null}">
+            <strong>Positie:</strong>
+            <span th:text="${position}">Positie</span>
+          </div>
+
+          <div th:if="${minAge != null}">
+            <strong>Minimum leeftijd:</strong>
+            <span th:text="${minAge}">18</span>
+          </div>
+
+          <div th:if="${maxAge != null}">
+            <strong>Maximum leeftijd:</strong>
+            <span th:text="${maxAge}">35</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4" th:if="${players != null and !#lists.isEmpty(players)}">
+        <div class="col-md-6 col-lg-4" th:each="player : ${players}">
+          <a th:href="@{/playerdetails/{id}(id=${player.id})}"
+             class="text-decoration-none text-dark">
+            <div class="card football-card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+              <img th:if="${player.imageUrl != null and !#strings.isEmpty(player.imageUrl)}"
+                   th:src="@{${player.imageUrl}}"
+                   alt="Speler afbeelding"
+                   class="w-100 football-card-image">
+
+              <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                  <div>
+                    <span class="badge bg-primary-subtle text-primary mb-2">Speler</span>
+                    <h4 class="fw-bold mb-1" th:text="${player.name}">Speler naam</h4>
+                    <p class="text-muted mb-0" th:text="${player.position}">Positie</p>
+                  </div>
+                  <div class="fs-2">👟</div>
+                </div>
+
+                <div class="football-info-box p-3 rounded-4 bg-light mb-3">
+                  <p class="mb-2">
+                    <strong>Leeftijd:</strong>
+                    <span th:text="${player.age}">24</span>
+                  </p>
+                  <p class="mb-2">
+                    <strong>Club:</strong>
+                    <span th:text="${player.club != null ? player.club.name : 'Geen club'}">Club</span>
+                  </p>
+                  <p class="mb-0">
+                    <strong>Nationaliteit:</strong>
+                    <span th:text="${player.nationality}">Belgisch</span>
+                  </p>
+                </div>
+
+                <div class="small text-muted">
+                  Klik om details te bekijken
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="alert alert-warning rounded-4 border-0 shadow-sm mb-0"
+           th:if="${players == null or #lists.isEmpty(players)}">
+        Geen spelers gevonden.
+      </div>
+    </div>
+  </section>
 </main>
 
 <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
+    <div class="modal-content rounded-4 border-0 shadow">
       <form method="get" th:action="@{/playerlist}">
         <div class="modal-header">
-          <h2 class="modal-title h5" id="filterModalLabel">Spelers filteren</h2>
+          <h2 class="modal-title h5 fw-bold" id="filterModalLabel">Spelers filteren</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sluiten"></button>
         </div>
 
