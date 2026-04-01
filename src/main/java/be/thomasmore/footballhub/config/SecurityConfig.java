@@ -1,16 +1,24 @@
 package be.thomasmore.footballhub.config;
 
 import be.thomasmore.footballhub.services.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+
+    @Value("${security.h2-console-needed:true}")
+    private boolean h2ConsoleNeeded;
 
     private final CustomUserDetailsService customUserDetailsService;
 
@@ -19,79 +27,106 @@ public class SecurityConfig {
     }
 
     @Bean
+    public UserDetailsService userDetailsService() {
+        return customUserDetailsService;
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(customUserDetailsService);
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authenticationProvider(authenticationProvider())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/",
-                                "/about",
-                                "/login",
-                                "/register",
-                                "/clublist",
-                                "/clubdetails",
-                                "/clubdetails/**",
-                                "/playerlist",
-                                "/playerdetails",
-                                "/playerdetails/**",
-                                "/stadiumlist",
-                                "/stadiumdetails",
-                                "/stadiumdetails/**",
-                                "/css/**",
-                                "/img/**",
-                                "/h2-console/**"
-                        ).permitAll()
-                        .requestMatchers(
-                                "/clubcreate",
-                                "/clubedit",
-                                "/clubedit/**",
-                                "/clubdelete/**",
-                                "/playercreate",
-                                "/playeredit",
-                                "/playeredit/**",
-                                "/playerdelete/**",
-                                "/stadiumcreate",
-                                "/stadiumedit",
-                                "/stadiumedit/**",
-                                "/stadiumdelete/**",
-                                "/reservationlist"
-                        ).hasRole("ADMIN")
-                        .requestMatchers(
-                                "/myreservations",
-                                "/reservationcreate",
-                                "/reservationdetails",
-                                "/reservationdetails/**",
-                                "/reservationdelete/**"
-                        ).authenticated()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/h2-console/**")
-                )
-                .headers(headers -> headers
-                        .frameOptions(frame -> frame.sameOrigin())
-                );
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.authorizeHttpRequests(auth -> {
+            // publieke pagina's
+            auth.requestMatchers(
+                    "/",
+                    "/about",
+                    "/login",
+                    "/register",
+
+                    "/clublist",
+                    "/clubdetails",
+                    "/clubdetails/**",
+
+                    "/playerlist",
+                    "/playerdetails",
+                    "/playerdetails/**",
+
+                    "/stadiumlist",
+                    "/stadiumdetails",
+                    "/stadiumdetails/**",
+
+                    "/css/**",
+                    "/img/**"
+            ).permitAll();
+
+            // H2 console alleen lokaal toelaten
+            if (h2ConsoleNeeded) {
+                auth.requestMatchers("/h2-console/**").permitAll();
+            }
+
+            // alleen admin
+            auth.requestMatchers(
+                    "/clubcreate",
+                    "/clubedit",
+                    "/clubedit/**",
+                    "/clubdelete/**",
+
+                    "/playercreate",
+                    "/playeredit",
+                    "/playeredit/**",
+                    "/playerdelete/**",
+
+                    "/stadiumcreate",
+                    "/stadiumedit",
+                    "/stadiumedit/**",
+                    "/stadiumdelete/**",
+
+                    "/reservationlist"
+            ).hasRole("ADMIN");
+
+            // ingelogde users
+            auth.requestMatchers(
+                    "/myreservations",
+                    "/reservationcreate",
+                    "/reservationdetails",
+                    "/reservationdetails/**",
+                    "/reservationdelete/**"
+            ).authenticated();
+
+            // alles anders => login vereist
+            auth.anyRequest().authenticated();
+        });
+
+        http.formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .permitAll()
+        );
+
+        http.logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+        );
+
+        // H2 console enkel lokaal werkend maken
+        if (h2ConsoleNeeded) {
+            http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+            http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+        }
 
         return http.build();
     }
