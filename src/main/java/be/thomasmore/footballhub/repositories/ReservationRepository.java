@@ -12,4 +12,6 @@ public interface ReservationRepository extends CrudRepository<Reservation, Integ
     Iterable<Reservation> findBySiteUserUsernameOrderByReservationDateAscStartHourAsc(String username);
 
     Iterable<Reservation> findByStadiumIdAndReservationDateOrderByStartHourAsc(Integer stadiumId, LocalDate reservationDate);
+
+    long countByStadiumId(Integer stadiumId);
 }

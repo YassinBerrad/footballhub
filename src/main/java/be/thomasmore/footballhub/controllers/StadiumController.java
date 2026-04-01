@@ -1,6 +1,7 @@
 package be.thomasmore.footballhub.controllers;
 
 import be.thomasmore.footballhub.model.Stadium;
+import be.thomasmore.footballhub.repositories.ReservationRepository;
 import be.thomasmore.footballhub.repositories.StadiumRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -25,9 +26,12 @@ import java.util.UUID;
 public class StadiumController {
 
     private final StadiumRepository stadiumRepository;
+    private final ReservationRepository reservationRepository;
 
-    public StadiumController(StadiumRepository stadiumRepository) {
+    public StadiumController(StadiumRepository stadiumRepository,
+                             ReservationRepository reservationRepository) {
         this.stadiumRepository = stadiumRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @GetMapping("/stadiumlist")
@@ -37,7 +41,9 @@ public class StadiumController {
     }
 
     @GetMapping({"/stadiumdetails", "/stadiumdetails/{id}"})
-    public String stadiumDetails(@PathVariable(required = false) Integer id, Model model) {
+    public String stadiumDetails(@PathVariable(required = false) Integer id,
+                                 @RequestParam(required = false) String deleteError,
+                                 Model model) {
 
         if (id != null) {
             Optional<Stadium> optionalStadium = stadiumRepository.findById(id);
@@ -45,6 +51,10 @@ public class StadiumController {
             if (optionalStadium.isPresent()) {
                 Stadium stadium = optionalStadium.get();
                 model.addAttribute("stadium", stadium);
+
+                if (deleteError != null) {
+                    model.addAttribute("deleteError", deleteError);
+                }
 
                 List<Stadium> allStadiums = new ArrayList<>();
                 stadiumRepository.findAllByOrderByIdAsc().forEach(allStadiums::add);
@@ -234,9 +244,17 @@ public class StadiumController {
 
     @PostMapping("/stadiumdelete/{id}")
     public String stadiumDelete(@PathVariable Integer id) {
-        if (stadiumRepository.existsById(id)) {
-            stadiumRepository.deleteById(id);
+        if (!stadiumRepository.existsById(id)) {
+            return "redirect:/stadiumlist";
         }
+
+        long reservationCount = reservationRepository.countByStadiumId(id);
+
+        if (reservationCount > 0) {
+            return "redirect:/stadiumdetails/" + id + "?deleteError=Dit stadium kan niet verwijderd worden omdat er nog reservaties aan gekoppeld zijn.";
+        }
+
+        stadiumRepository.deleteById(id);
 
         return "redirect:/stadiumlist";
     }
