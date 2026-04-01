@@ -10,7 +10,6 @@ Admins kunnen daarnaast clubs, spelers, stadions en reservaties beheren via een 
 
 * [Productvisie](#productvisie)
 * [Productbeschrijving](#productbeschrijving)
-* [Feedback verwerkt](#feedback-verwerkt)
 * [User Story Map](#user-story-map)
 * [Persona's](#personas)
 * [Conceptueel model](#conceptueel-model)
@@ -89,28 +88,6 @@ FootballHub centraliseert informatie en reservaties in één platform.
 * logische domeinrelaties
 * realistische business flow via reservaties
 * geschikt als analyse- en ontwikkelproject
-
----
-
-# Feedback verwerkt
-
-Tijdens de tussentijdse voorstelling en tijdens de lessen werd de analyse verfijnd en verder uitgewerkt.
-
-## Verwerkte feedback
-
-* De **User Story Map** werd duidelijker opgesplitst in:
-
-  * backbone
-  * user activiteiten
-  * stories
-  * drie slices: **MVP**, **must-have** en **nice-to-have**
-* De **3 persona’s** werden concreter gemaakt en beter afgestemd op echte gebruikers van het systeem.
-* De **wireframes** werden aangepast zodat ze beter aansluiten op de effectief gebouwde schermen in de applicatie.
-* De **Use Case Diagrammen** werden opgesplitst in twee logische delen:
-
-  * gast + gebruiker
-  * admin
-* De **reservatieflow** werd extra uitgewerkt in de activity- en sequence diagrammen omdat dit de belangrijkste business flow van FootballHub is.
 
 ---
 
