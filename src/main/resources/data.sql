@@ -35,37 +35,37 @@ INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
 VALUES ('Charles De Ketelaere', 'Aanvaller', 23, 'België', '/img/deketelaere.jpg', 2);
 
 INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
-VALUES ('Bryan Heynen', 'Middenvelder', 27, 'België', '/img/debruyne.jpg', 3);
+VALUES ('Bryan Heynen', 'Middenvelder', 27, 'België', '/img/heynen.jpg', 3);
 
 INSERT INTO PLAYER (NAME, POSITION, AGE, NATIONALITY, IMAGE_URL, CLUB_ID)
-VALUES ('Arthur Vermeeren', 'Middenvelder', 20, 'België', '/img/heynen.jpg', 4);
+VALUES ('Arthur Vermeeren', 'Middenvelder', 20, 'België', '/img/vermeeren.jpg', 4);
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Lotto Arena Field', 'Antwerpen', 12000, 450, 'Compact modern stadion voor trainingen en kleine tornooien.', '/img/anderlecht.jpg');
+VALUES ('Lotto Arena Field', 'Antwerpen', 12000, 450, 'Compact modern stadion voor trainingen en kleine tornooien.', '/img/lottoarena.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Bruges Elite Stadium', 'Brugge', 22000, 650, 'Modern voetbalstadion met uitstekende grasmat en tribunes.', '/img/clubbrugge.jpg');
+VALUES ('Bruges Elite Stadium', 'Brugge', 22000, 650, 'Modern voetbalstadion met uitstekende grasmat en tribunes.', '/img/bruges.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Genk Performance Arena', 'Genk', 18000, 550, 'Professionele voetbalinfrastructuur voor wedstrijden en events.', '/img/genk.jpg');
+VALUES ('Genk Performance Arena', 'Genk', 18000, 550, 'Professionele voetbalinfrastructuur voor wedstrijden en events.', '/img/genkstadium.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Bosuil Training Ground', 'Antwerpen', 15000, 500, 'Veelgebruikte locatie voor jeugdtoernooien en clubtrainingen.', '/img/antwerp.jpg');
+VALUES ('Bosuil Training Ground', 'Antwerpen', 15000, 500, 'Veelgebruikte locatie voor jeugdtoernooien en clubtrainingen.', '/img/bosuil.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Capital Football Dome', 'Brussel', 30000, 900, 'Grote locatie geschikt voor grote voetbalwedstrijden en evenementen.', '/img/anderlecht.jpg');
+VALUES ('Capital Football Dome', 'Brussel', 30000, 900, 'Grote locatie geschikt voor grote voetbalwedstrijden en evenementen.', '/img/dome.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Flanders Match Arena', 'Gent', 25000, 700, 'Sterke allround locatie voor competitiematchen en tornooien.', '/img/clubbrugge.jpg');
+VALUES ('Flanders Match Arena', 'Gent', 25000, 700, 'Sterke allround locatie voor competitiematchen en tornooien.', '/img/flanders.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Limburg Soccer Park', 'Hasselt', 14000, 480, 'Ideaal voor trainingskampen, oefenwedstrijden en lokale events.', '/img/genk.jpg');
+VALUES ('Limburg Soccer Park', 'Hasselt', 14000, 480, 'Ideaal voor trainingskampen, oefenwedstrijden en lokale events.', '/img/limburg.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('River Side Stadium', 'Mechelen', 17000, 520, 'Stadion met moderne kleedkamers en goed onderhouden veld.', '/img/antwerp.jpg');
+VALUES ('River Side Stadium', 'Mechelen', 17000, 520, 'Stadion met moderne kleedkamers en goed onderhouden veld.', '/img/riverside.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('Belgium Pro Arena', 'Leuven', 28000, 850, 'Premium stadion met veel zitplaatsen en eventmogelijkheden.', '/img/anderlecht.jpg');
+VALUES ('Belgium Pro Arena', 'Leuven', 28000, 850, 'Premium stadion met veel zitplaatsen en eventmogelijkheden.', '/img/proarena.jpg');
 
 INSERT INTO STADIUM (NAME, CITY, CAPACITY, PRICE_PER_HOUR, DESCRIPTION, IMAGE_URL)
-VALUES ('National Football Center', 'Luik', 35000, 1100, 'Toplocatie voor grote wedstrijden, finales en voetbalactiviteiten.', '/img/clubbrugge.jpg');
+VALUES ('National Football Center', 'Luik', 35000, 1100, 'Toplocatie voor grote wedstrijden, finales en voetbalactiviteiten.', '/img/national.jpg');
